@@ -1,0 +1,2 @@
+# lifesync
+life management platform
