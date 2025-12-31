@@ -2,33 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom CSS - adjust colors here */
 @layer base {
+  :root {
+    /* Primary Colors */
+    --color-primary: #B85C38;
+    --color-primary-light: #D4845F;
+    --color-primary-dark: #8B4328;
+    
+    /* Secondary Colors */
+    --color-secondary: #E8D5C4;
+    --color-secondary-light: #F5EDE5;
+    --color-secondary-dark: #D4BDA9;
+    
+    /* Background Colors */
+    --color-background: #F8F4F0;
+    --color-background-dark: #E8E0D8;
+    
+    /* Semantic Colors */
+    --color-terracotta: #B85C38;
+    --color-cream: #F8F4F0;
+    --color-beige: #E8D5C4;
+  }
+  
   * {
     box-sizing: border-box;
   }
   
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: #F8F4F0; /* Cream background */
-    color: #1A1A1A; /* Dark text */
-  }
-}
-
-/* You can override Tailwind colors here */
-@layer components {
-  .text-primary {
-    color: #B85C38; /* Terracotta - adjust this! */
-  }
-  
-  /* .bg-primary {
-    background-color: #e6cda9; /* Terracotta - adjust this! */
-  /* } */
-  .bg-primary {
-    background-color: #e7a281e2; /* Terracotta - adjust this! */
-  }
-  
-  .border-primary {
-    border-color: #B85C38; /* Terracotta - adjust this! */
+    background-color: var(--color-background);
+    color: #1A1A1A;
   }
 }

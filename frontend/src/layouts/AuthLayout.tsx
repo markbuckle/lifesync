@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { House, CalendarDays, ListTodo, FolderDot, BotMessageSquare, ChevronLeft, ChevronRight, Settings, Bell, UserRound } from 'lucide-react';
 
 const AuthLayout: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
 
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: '🏠' },
-    { name: 'Calendar', href: '/calendar', icon: '📅' },
-    { name: 'Tasks', href: '/tasks', icon: '📋' },
-    { name: 'Projects', href: '/projects', icon: '📊' },
-    { name: 'AI Assistant', href: '/assistant', icon: '✨' },
+    { name: 'Dashboard', href: '/dashboard', icon: House },
+    { name: 'Calendar', href: '/calendar', icon: CalendarDays },
+    { name: 'Tasks', href: '/tasks', icon: ListTodo },
+    { name: 'Projects', href: '/projects', icon: FolderDot },
+    { name: 'AI Assistant', href: '/assistant', icon: BotMessageSquare },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+   const isActive = (path: string) => location.pathname === path;
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -34,30 +35,37 @@ const AuthLayout: React.FC = () => {
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             className="p-2 rounded-lg hover:bg-gray-100"
           >
-            {sidebarCollapsed ? '→' : '←'}
+            {sidebarCollapsed ? (
+              <ChevronRight className="w-5 h-5 text-gray-600" />
+            ) : (
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
+            )}
           </button>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-1">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              className={`
-                flex items-center px-3 py-2 rounded-lg transition-colors
-                ${isActive(item.href) 
-                  ? 'bg-primary-light text-primary-dark' 
-                  : 'text-gray-700 hover:bg-gray-100'
-                }
-              `}
-            >
-              <span className="text-xl">{item.icon}</span>
-              {!sidebarCollapsed && (
-                <span className="ml-3">{item.name}</span>
-              )}
-            </Link>
-          ))}
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`
+                  flex items-center px-3 py-2 rounded-lg transition-colors
+                  ${isActive(item.href) 
+                    ? 'bg-primary-light text-primary-dark' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                  }
+                `}
+              >
+                <Icon className="w-5 h-5" />
+                {!sidebarCollapsed && (
+                  <span className="ml-3">{item.name}</span>
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Settings */}
@@ -72,7 +80,7 @@ const AuthLayout: React.FC = () => {
               }
             `}
           >
-            <span className="text-xl">⚙️</span>
+            <Settings className="w-5 h-5" />
             {!sidebarCollapsed && <span className="ml-3">Settings</span>}
           </Link>
         </div>
@@ -95,10 +103,10 @@ const AuthLayout: React.FC = () => {
               + New
             </button>
             <button className="p-2 rounded-lg hover:bg-gray-100">
-              🔔
+              <Bell className="w-5 h-5 text-gray-600" />
             </button>
-            <button className="w-10 h-10 rounded-full bg-primary-light text-primary-dark flex items-center justify-center font-semibold">
-              U
+            <button className="w-10 h-10 rounded-full bg-primary-light text-primary-dark flex items-center justify-center">
+              <UserRound className="w-5 h-5" />
             </button>
           </div>
         </header>
