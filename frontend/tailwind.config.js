@@ -27,6 +27,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        'architects': ['Architects Daughter', 'cursive'],
       },
       spacing: {
         '18': '4.5rem',

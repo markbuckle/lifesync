@@ -19,6 +19,9 @@ import ProjectDetailPage from './pages/auth/ProjectDetailPage';
 import AIAssistantPage from './pages/auth/AIAssistantPage';
 import SettingsPage from './pages/auth/SettingsPage';
 
+// Styles
+import './styles/fonts.css';
+
 function App() {
   return (
     <Router>
