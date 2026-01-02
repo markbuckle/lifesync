@@ -84,33 +84,34 @@ This project showcases skills for:
 
 ## DevOps
 
-Merge Staging → Main
-Step 1: Make sure staging is clean and pushed
-bash# Switch to staging
+### Merge Staging → Main
+
+#### Step 1: Make sure staging is clean and pushed
+Switch to staging
 git checkout staging
 
-### Check status
+Check status
 git status
 
-### If you have uncommitted changes, commit them
+If you have uncommitted changes, commit them
 git add .
 git commit -m "your message"
 
-### Push to GitHub
+Push to GitHub
 git push origin staging
 
-Step 2: Switch to main and merge
-bash# Switch to main branch
+#### Step 2: Switch to main and merge
+Switch to main branch
 git checkout main
 
-### Pull latest main (in case there are any changes)
+Pull latest main (in case there are any changes)
 git pull origin main
 
-### Merge staging into main
+Merge staging into main
 git merge staging
 
-Step 3: Push main to GitHub
-bash# Push the merged main branch
+#### Step 3: Push main to GitHub
+Push the merged main branch
 git push origin main
 
 ## Development Timeline
