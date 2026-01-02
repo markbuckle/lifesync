@@ -109,6 +109,8 @@ Pull latest main (in case there are any changes)
 
 Merge staging into main
 `git merge staging`
+If the above command has merge conflicts, use the command below since staging has the latest work and main is behind:
+`git merge staging -X theirs`
 
 #### Step 3: Push main to GitHub
 Push the merged main branch
