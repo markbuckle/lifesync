@@ -11,8 +11,8 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-background">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+    <div className="min-h-[100vh] flex items-center justify-center bg-background">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md mt-auto mb-auto">
         <h1 className="text-3xl font-bold text-center mb-8 text-primary">Welcome back</h1>
         
         <form onSubmit={handleLogin} className="space-y-6">

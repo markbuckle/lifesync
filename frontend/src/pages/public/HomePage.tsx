@@ -4,14 +4,28 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {/* Hero Section - to test background colors */}
-      <section className="bg-gradient-to-br from-gray-800 via-gray-600 to-[#b97e6789] text-white py-20">
-      {/* <section className="bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white py-20"> */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative bg-gradient-to-br from-gray-900 via-gray-700 to-[#B85C38] text-white py-20 overflow-hidden min-h-screen flex items-center">
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover opacity-20"
+        >
+          <source src="/hero-bg.mp4" type="video/mp4" />
+        </video>
+
+        {/* Overlay for better text readability */}
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
+
+        {/* Content (needs to be relative to stay above video) */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Your life, automated
+            Automate the mundane.<br/> Focus on what matters.
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8">
-            Testing the colors and layout
+            LifeSync handles your appointments, tasks, and projects so you can spend time on the important stuff.
           </p>
         </div>
       </section>
