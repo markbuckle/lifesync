@@ -88,31 +88,31 @@ This project showcases skills for:
 
 #### Step 1: Make sure staging is clean and pushed
 Switch to staging
-git checkout staging
+`git checkout staging`
 
 Check status
-git status
+`git status`
 
 If you have uncommitted changes, commit them
-git add .
-git commit -m "your message"
+`git add .`
+`git commit -m "your message"`
 
 Push to GitHub
-git push origin staging
+`git push origin staging`
 
 #### Step 2: Switch to main and merge
 Switch to main branch
-git checkout main
+`git checkout main`
 
 Pull latest main (in case there are any changes)
-git pull origin main
+`git pull origin main`
 
 Merge staging into main
-git merge staging
+`git merge staging`
 
 #### Step 3: Push main to GitHub
 Push the merged main branch
-git push origin main
+`git push origin main`
 
 ## Development Timeline
 
