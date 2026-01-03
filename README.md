@@ -26,7 +26,7 @@ This project showcases skills for:
 ### Frontend
 - React 18 + TypeScript
 - Webpack 5
-- Tailwind CSS (Function Health-inspired design)
+- Tailwind CSS
 - Apollo Client (GraphQL)
 - Jest + Playwright (testing)
 
