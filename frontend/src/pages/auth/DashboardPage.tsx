@@ -1,4 +1,6 @@
 import React from 'react';
+import { Sparkles } from 'lucide-react';
+
 
 const DashboardPage: React.FC = () => {
   const greeting = () => {
@@ -43,7 +45,7 @@ const DashboardPage: React.FC = () => {
         {/* AI Insights Widget */}
         <div className="bg-primary text-white p-6 rounded-xl shadow-sm col-span-full">
           <div className="flex items-start">
-            <span className="text-3xl mr-4">✨</span>
+            <span className="text-3xl mr-4"><Sparkles /></span>
             <div>
               <h2 className="text-xl font-semibold mb-2">AI Insight</h2>
               <p className="opacity-90">

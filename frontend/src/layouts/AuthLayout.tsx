@@ -27,8 +27,11 @@ const AuthLayout: React.FC = () => {
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
           {!sidebarCollapsed && (
-            <Link to="/dashboard" className="text-xl font-bold text-primary">
-              LifeSync
+            <Link to="/dashboard" className="flex text-xl font-bold text-primary">
+              <img src="/logo.svg" alt="LifeSync Logo" className="w-auto h-6 mr-2 mt-0.5"/>
+              <span className="font-bold text-2xl font-architects">
+                LifeSync
+              </span>
             </Link>
           )}
           <button
@@ -54,7 +57,7 @@ const AuthLayout: React.FC = () => {
                 className={`
                   flex items-center px-3 py-2 rounded-lg transition-colors
                   ${isActive(item.href) 
-                    ? 'bg-primary-light text-primary-dark' 
+                    ? 'bg-secondary text-primary-dark' 
                     : 'text-gray-700 hover:bg-gray-100'
                   }
                 `}
@@ -105,7 +108,7 @@ const AuthLayout: React.FC = () => {
             <button className="p-2 rounded-lg hover:bg-gray-100">
               <Bell className="w-5 h-5 text-gray-600" />
             </button>
-            <button className="w-10 h-10 rounded-full bg-primary-light text-primary-dark flex items-center justify-center">
+            <button className="w-10 h-10 rounded-full bg-secondary text-primary-dark flex items-center justify-center">
               <UserRound className="w-5 h-5" />
             </button>
           </div>
