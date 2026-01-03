@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -47,7 +47,10 @@ const LoginPage: React.FC = () => {
         </form>
 
         <p className="text-center text-gray-600 mt-6">
-          Don`t have an account? <a href="#" className="text-primary font-semibold">Sign up</a>
+          Don`t have an account? 
+          <Link to="/signup" className="text-primary font-semibold hover:underline">
+            Sign up
+          </Link>
         </p>
       </div>
     </div>

@@ -8,6 +8,7 @@ import HomePage from './pages/public/HomePage';
 import FeaturesPage from './pages/public/FeaturesPage';
 import PricingPage from './pages/public/PricingPage';
 import LoginPage from './pages/public/LoginPage';
+import SignupPage from './pages/public/SignupPage';
 
 // Authenticated pages
 import DashboardPage from './pages/auth/DashboardPage';
@@ -32,6 +33,7 @@ function App() {
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Route>
 
         {/* Authenticated routes */}
