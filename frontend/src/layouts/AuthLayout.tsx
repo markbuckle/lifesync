@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { House, CalendarDays, ListTodo, FolderDot, BotMessageSquare, ChevronLeft, ChevronRight, Settings, Bell, UserRound } from 'lucide-react';
+import NotificationsDropdown from '../components/common/NotificationsDropdown';
+import ProfileDropdown from '../components/common/ProfileDropdown';
 
 const AuthLayout: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -22,7 +24,7 @@ const AuthLayout: React.FC = () => {
       <aside 
         className={`${
           sidebarCollapsed ? 'w-17' : 'w-56'
-        } bg-white border-r border-gray-200 transition-all duration-300 flex flex-col`}
+        } bg-white border-r border-gray-200 transition-all duration-300 flex flex-col h-screen sticky top-0`}
       >
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
@@ -78,7 +80,7 @@ const AuthLayout: React.FC = () => {
             className={`
               flex items-center px-3 py-2 rounded-lg transition-colors
               ${isActive('/settings')
-                ? 'bg-primary-light text-primary-dark'
+                ? 'bg-secondary text-primary-dark'
                 : 'text-gray-700 hover:bg-gray-100'
               }
             `}
@@ -105,12 +107,8 @@ const AuthLayout: React.FC = () => {
             {/* <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark">
               + New
             </button> */}
-            <button className="p-2 rounded-lg hover:bg-gray-100">
-              <Bell className="w-5 h-5 text-gray-600" />
-            </button>
-            <button className="w-10 h-10 rounded-full bg-secondary text-primary-dark flex items-center justify-center">
-              <UserRound className="w-5 h-5" />
-            </button>
+            <NotificationsDropdown />
+            <ProfileDropdown />
           </div>
         </header>
 
