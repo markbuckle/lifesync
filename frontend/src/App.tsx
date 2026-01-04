@@ -13,7 +13,6 @@ import SignupPage from './pages/public/SignupPage';
 // Authenticated pages
 import DashboardPage from './pages/auth/DashboardPage';
 import CalendarPage from './pages/auth/CalendarPage';
-import AppointmentsPage from './pages/auth/AppointmentsPage';
 import TasksPage from './pages/auth/TasksPage';
 import ProjectsPage from './pages/auth/ProjectsPage';
 import ProjectDetailPage from './pages/auth/ProjectDetailPage';
@@ -40,7 +39,6 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
