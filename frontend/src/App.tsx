@@ -8,11 +8,11 @@ import HomePage from './pages/public/HomePage';
 import FeaturesPage from './pages/public/FeaturesPage';
 import PricingPage from './pages/public/PricingPage';
 import LoginPage from './pages/public/LoginPage';
+import SignupPage from './pages/public/SignupPage';
 
 // Authenticated pages
 import DashboardPage from './pages/auth/DashboardPage';
 import CalendarPage from './pages/auth/CalendarPage';
-import AppointmentsPage from './pages/auth/AppointmentsPage';
 import TasksPage from './pages/auth/TasksPage';
 import ProjectsPage from './pages/auth/ProjectsPage';
 import ProjectDetailPage from './pages/auth/ProjectDetailPage';
@@ -32,13 +32,13 @@ function App() {
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Route>
 
         {/* Authenticated routes */}
         <Route element={<AuthLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />

@@ -32,57 +32,94 @@ const PublicLayout: React.FC = () => {
       {/* Navigation */}
       <nav 
         className={`
-          fixed top-0 left-0 right-0 z-50
+          fixed left-0 right-0 z-50
           transition-all duration-400 ease-in-out
           ${isScrolled 
-            ? 'backdrop-blur-[40px] bg-white/5 shadow-sm' 
-            : 'bg-white'
+            ? 'top-3 left-3 right-3 rounded-full backdrop-blur-[40px] bg-white/5 shadow-sm' 
+            : 'top-0 bg-white'
           }
         `}
       >
         <div className={`
           mx-auto px-4 sm:px-6 lg:px-8
           transition-all duration-400 ease-in-out
-          ${isScrolled ? 'max-w-7xl rounded-xl' : 'max-w-7xl'}
+          ${isScrolled ? 'max-w-7xl rounded-2xl' : 'max-w-7xl'}
         `}>
-          <div className="flex justify-between items-center h-16">
+          <div className={`
+            flex justify-between items-center
+            transition-all duration-400 ease-in-out
+            ${isScrolled ? 'h-14' : 'h-16'}
+          `}>
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-2">
-                <img src="/logo.svg" alt="LifeSync Logo" className="h-8 w-auto" />
-                <span className="text-2xl font-bold text-primary font-architects [transform:scaleY(1.1)] mt-0.5">
+                <img 
+                  src="/logo.svg" 
+                  alt="LifeSync Logo" 
+                  className={`
+                    w-auto transition-all duration-400 ease-in-out
+                    ${isScrolled ? 'h-6' : 'h-8'}
+                  `}
+                />
+                <span className={`
+                  font-bold text-primary font-architects [transform:scaleY(1.1)] mt-0.5
+                  transition-all duration-400 ease-in-out
+                  ${isScrolled ? 'text-xl' : 'text-2xl'}
+                `}>
                   LifeSync
                 </span>
               </Link>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/features" 
-              className={`transition-colors ${
-                isScrolled && isDarkBackground 
-                  ? 'text-white hover:text-gray-200' 
-                  : 'text-gray-700 hover:text-primary'
-              }`}
-            >
-              Features
-            </Link>
-            <Link 
-              to="/pricing" 
-              className={`transition-colors ${
-                isScrolled && isDarkBackground 
-                  ? 'text-white hover:text-gray-200' 
-                  : 'text-gray-700 hover:text-primary'
-              }`}
-            >
-              Pricing
-            </Link>
-            <Link 
-              to="/login" 
-              className="bg-primary text-white px-6 py-2.5 rounded-full hover:bg-primary-dark transition-colors font-medium"
-            >
-              Login
-            </Link>
-          </div>
+              <Link 
+                to="/features" 
+                className={`
+                  transition-all duration-400 ease-in-out
+                  ${isScrolled ? 'text-sm' : 'text-base'}
+                  ${isScrolled && isDarkBackground 
+                    ? 'text-white hover:text-gray-200' 
+                    : 'text-gray-700 hover:text-primary'
+                  }
+                `}
+              >
+                Features
+              </Link>
+              <Link 
+                to="/pricing" 
+                className={`
+                  transition-all duration-400 ease-in-out
+                  ${isScrolled ? 'text-sm' : 'text-base'}
+                  ${isScrolled && isDarkBackground 
+                    ? 'text-white hover:text-gray-200' 
+                    : 'text-gray-700 hover:text-primary'
+                  }
+                `}
+              >
+                Pricing
+              </Link>
+              <div className="space-x-2">
+                <Link
+                  to="/login"
+                  className={`
+                    bg-primary text-white rounded-full hover:bg-primary-dark 
+                    transition-all duration-400 ease-in-out font-medium
+                    ${isScrolled ? 'px-5 py-2 text-sm' : 'px-6 py-2.5 text-base'}
+                  `}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className={`
+                    border-2 border-primary text-primary rounded-full 
+                    hover:bg-primary hover:text-white transition-all duration-400 ease-in-out font-medium
+                    ${isScrolled ? 'px-3.5 py-1.5 text-sm' : 'px-4 py-2 text-base'}
+                  `}
+                >
+                  Sign up
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </nav>

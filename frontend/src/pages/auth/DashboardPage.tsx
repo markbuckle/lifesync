@@ -1,4 +1,10 @@
 import React from 'react';
+import { Sparkles } from 'lucide-react';
+import TodayWidget from '../../components/dashboard/TodayWidget';
+import ThisWeekWidget from '../../components/dashboard/ThisWeekWidget';
+import ProjectsWidget from '../../components/dashboard/ProjectsWidget';
+import { sampleAppointments, sampleTasks, sampleProjects } from '../../sampleData';
+
 
 const DashboardPage: React.FC = () => {
   const greeting = () => {
@@ -14,36 +20,18 @@ const DashboardPage: React.FC = () => {
       
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Today Widget */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4 text-primary">Today</h2>
-          <div className="space-y-2">
-            <p className="text-gray-600">3 appointments</p>
-            <p className="text-gray-600">5 tasks due</p>
-          </div>
-        </div>
+        <TodayWidget appointments={sampleAppointments} tasks={sampleTasks} />
 
         {/* This Week Widget */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4 text-primary">This Week</h2>
-          <div className="space-y-2">
-            <p className="text-gray-600">12 appointments</p>
-            <p className="text-gray-600">18 tasks</p>
-          </div>
-        </div>
+        <ThisWeekWidget appointments={sampleAppointments} tasks={sampleTasks} />
 
         {/* Projects Widget */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4 text-primary">Projects</h2>
-          <div className="space-y-2">
-            <p className="text-gray-600">3 active projects</p>
-            <p className="text-gray-600">2 need attention</p>
-          </div>
-        </div>
+        <ProjectsWidget projects={sampleProjects} />
 
         {/* AI Insights Widget */}
         <div className="bg-primary text-white p-6 rounded-xl shadow-sm col-span-full">
           <div className="flex items-start">
-            <span className="text-3xl mr-4">✨</span>
+           <Sparkles className="w-8 h-8 mr-4 flex-shrink-0" />
             <div>
               <h2 className="text-xl font-semibold mb-2">AI Insight</h2>
               <p className="opacity-90">
