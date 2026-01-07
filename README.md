@@ -116,6 +116,22 @@ If the above command has merge conflicts, use the command below since staging ha
 Push the merged main branch
 `git push origin main`
 
+## Backend
+
+### Virtual Environment
+
+Activate it
+#### On Windows:
+`venv\Scripts\activate`
+
+#### On Mac/Linux:
+`source venv/bin/activate`
+
+## Test Fast API routes
+from 
+backend/
+`uvicorn main:app --reload --port 8000`
+
 ## Development Timeline
 
 8-week sprint (part-time, ~20 hrs/week):
