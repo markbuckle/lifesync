@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # Word docs
 *.docx
+
+#Virtual environments
+backend/venv/
