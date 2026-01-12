@@ -116,18 +116,6 @@ If the above command has merge conflicts, use the command below since staging ha
 Push the merged main branch
 `git push origin main`
 
-## Development Timeline
-
-8-week sprint (part-time, ~20 hrs/week):
-- **Weeks 1-3:** Research, design system, wireframes, high-fidelity mockups
-- **Weeks 4-5:** Frontend foundation, component library
-- **Weeks 6-7:** Backend API, database, AI integration
-- **Week 8:** Testing, documentation, deployment
-
-## Project Status
-
-🚧 **In Progress** - Currently in Week 1 (Research & Design)
-
 ## Deployment
 
 - **Staging:** TBD
