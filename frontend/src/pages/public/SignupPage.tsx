@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useMutation } from '@apollo/client/react';
+import { REGISTER_MUTATION } from '../../graphql/mutations';
+
+interface RegisterResponse {
+  register: {
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isActive: boolean;
+  };
+}
 
 const SignupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -11,18 +23,31 @@ const SignupPage: React.FC = () => {
     confirmPassword: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [serverError, setServerError] = useState('');
+
+  const [register, { loading }] = useMutation<RegisterResponse>(REGISTER_MUTATION, {
+    onCompleted: () => {
+      // Registration successful, redirect to login
+      navigate('/login');
+    },
+    onError: (error) => {
+      setServerError(error.message);
+    },
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Clear error for this field when user starts typing
     if (errors[e.target.name]) {
       setErrors({
         ...errors,
         [e.target.name]: '',
       });
     }
+    setServerError('');
   };
 
   const validateForm = () => {
@@ -60,10 +85,19 @@ const SignupPage: React.FC = () => {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+    setServerError('');
     
     if (validateForm()) {
-      console.log('Signup data:', formData);
-      navigate('/dashboard');
+      register({
+        variables: {
+          userInput: {
+            email: formData.email,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            password: formData.password,
+          },
+        },
+      });
     }
   };
 

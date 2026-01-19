@@ -130,7 +130,29 @@ Activate it
 ## Test Fast API routes
 from 
 backend/
-`uvicorn main:app --reload --port 8000`
+`uvicorn app.main:app --reload --port 8000`
+
+## GraphQL
+
+### Backend (backend/app/graphql/):
+
+Defines what the API can do
+Resolvers that execute the logic
+Example: "When someone calls login, run this Python function"
+
+### Frontend (frontend/src/graphql/):
+
+Calls the API
+Queries/mutations that React components use
+Example: "Send a login request to the backend with email/password"
+
+#### Example Flow:
+
+User clicks "Login" in React
+React sends: LOGIN_MUTATION → Backend
+Backend executes: login() resolver in mutations.py
+Backend returns: { accessToken, user }
+React receives token and stores it
 
 ## Development Timeline
 
