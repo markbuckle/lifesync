@@ -24,16 +24,16 @@ import './styles/fonts.css';
 
 function App() {
   return (
-    <Router>
       <Routes>
         {/* Public routes */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+        </Route>
+
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-        </Route>
 
         {/* Authenticated routes */}
         <Route element={<AuthLayout />}>
@@ -46,7 +46,6 @@ function App() {
           <Route path="/settings" element={<SettingsPage />} /> 
         </Route>
       </Routes>
-    </Router>
   );
 }
 
