@@ -4,7 +4,7 @@ from typing import Optional
 from jose import JWTError, jwt
 from app.core.config import settings
 
-# Password hashing - use argon2 instead of bcrypt
+# Password hashing
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto",
@@ -40,10 +40,18 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 def verify_token(token: str) -> Optional[str]:
     """Verify JWT token and return email"""
     try:
+        print(f"DEBUG verify_token - Decoding token...")  # DEBUG
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        print(f"DEBUG verify_token - Payload: {payload}")  # DEBUG
         email: str = payload.get("sub")
+        print(f"DEBUG verify_token - Email extracted: {email}")  # DEBUG
         if email is None:
+            print("DEBUG verify_token - Email is None")  # DEBUG
             return None
         return email
-    except JWTError:
+    except JWTError as e:
+        print(f"DEBUG verify_token - JWTError: {e}")  # DEBUG
+        return None
+    except Exception as e:
+        print(f"DEBUG verify_token - Unexpected error: {e}")  # DEBUG
         return None
