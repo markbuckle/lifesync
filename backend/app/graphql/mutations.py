@@ -187,3 +187,81 @@ class Mutation:
             created_at=db_project.created_at,
             updated_at=db_project.updated_at
         )
+    
+    @strawberry.mutation
+    def update_appointment(self, id: int, appointment_input: AppointmentInput, info: Info) -> Appointment:
+        """Update an existing appointment (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the appointment
+        db_appointment = context.db.query(AppointmentModel).filter(
+            AppointmentModel.id == id,
+            AppointmentModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_appointment:
+            raise Exception("Appointment not found")
+        
+        # Update fields
+        db_appointment.title = appointment_input.title
+        db_appointment.date = appointment_input.date
+        db_appointment.time = appointment_input.time
+        db_appointment.type = appointment_input.type
+        db_appointment.color = appointment_input.color
+        db_appointment.notes = appointment_input.notes
+        
+        context.db.commit()
+        context.db.refresh(db_appointment)
+        
+        return Appointment(
+            id=db_appointment.id,
+            user_id=db_appointment.user_id,
+            title=db_appointment.title,
+            date=db_appointment.date,
+            time=db_appointment.time,
+            type=db_appointment.type,
+            color=db_appointment.color,
+            notes=db_appointment.notes,
+            created_at=db_appointment.created_at,
+            updated_at=db_appointment.updated_at
+        )
+    
+    @strawberry.mutation
+    def delete_appointment(self, id: int, info: Info) -> Appointment:
+        """Delete an appointment (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the appointment
+        db_appointment = context.db.query(AppointmentModel).filter(
+            AppointmentModel.id == id,
+            AppointmentModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_appointment:
+            raise Exception("Appointment not found")
+        
+        # Store data before deletion
+        appointment_data = Appointment(
+            id=db_appointment.id,
+            user_id=db_appointment.user_id,
+            title=db_appointment.title,
+            date=db_appointment.date,
+            time=db_appointment.time,
+            type=db_appointment.type,
+            color=db_appointment.color,
+            notes=db_appointment.notes,
+            created_at=db_appointment.created_at,
+            updated_at=db_appointment.updated_at
+        )
+        
+        # Delete
+        context.db.delete(db_appointment)
+        context.db.commit()
+        
+        return appointment_data

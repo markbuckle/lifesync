@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { GET_APPOINTMENTS } from '../../graphql/queries';
-import { CREATE_APPOINTMENT_MUTATION } from '../../graphql/mutations';
+import { 
+  CREATE_APPOINTMENT_MUTATION, 
+  UPDATE_APPOINTMENT_MUTATION,
+  DELETE_APPOINTMENT_MUTATION 
+} from '../../graphql/mutations';
 import BigCalendar from '../../components/calendar/BigCalendar';
 import AppointmentListItem from '../../components/appointments/AppointmentListItem';
 import AppointmentModal from '../../components/appointments/AppointmentModal';
@@ -52,13 +56,46 @@ const CalendarPage: React.FC = () => {
     },
   });
 
-  const handleSaveAppointment = (appointmentData: Omit<Appointment, 'id'>) => {
-    if (editingAppointment) {
-      // TODO: Implement update mutation
-      console.log('Update appointment:', editingAppointment.id, appointmentData);
-      alert('Update functionality coming soon!');
+  // Update appointment mutation
+  const [updateAppointment] = useMutation(UPDATE_APPOINTMENT_MUTATION, {
+    onCompleted: () => {
+      refetch();
       setIsModalOpen(false);
       setEditingAppointment(null);
+    },
+    onError: (error) => {
+      console.error('Error updating appointment:', error);
+      alert('Failed to update appointment: ' + error.message);
+    },
+  });
+
+  // Delete appointment mutation
+  const [deleteAppointment] = useMutation(DELETE_APPOINTMENT_MUTATION, {
+    onCompleted: () => {
+      refetch();
+    },
+    onError: (error) => {
+      console.error('Error deleting appointment:', error);
+      alert('Failed to delete appointment: ' + error.message);
+    },
+  });
+
+  const handleSaveAppointment = (appointmentData: Omit<Appointment, 'id'>) => {
+    if (editingAppointment) {
+      // Update existing appointment
+      updateAppointment({
+        variables: {
+          id: parseInt(editingAppointment.id),
+          appointmentInput: {
+            title: appointmentData.title,
+            date: appointmentData.date.toISOString(),
+            time: appointmentData.time,
+            type: appointmentData.type,
+            color: appointmentData.color,
+            notes: appointmentData.notes || null,
+          },
+        },
+      });
     } else {
       // Create new appointment
       createAppointment({
@@ -83,9 +120,11 @@ const CalendarPage: React.FC = () => {
 
   const handleDeleteAppointment = (id: string) => {
     if (window.confirm('Are you sure you want to delete this appointment?')) {
-      // TODO: Implement delete mutation
-      console.log('Delete appointment:', id);
-      alert('Delete functionality coming soon!');
+      deleteAppointment({
+        variables: {
+          id: parseInt(id),
+        },
+      });
     }
   };
 
