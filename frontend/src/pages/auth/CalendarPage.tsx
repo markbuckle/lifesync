@@ -1,22 +1,79 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation } from '@apollo/client/react';
+import { GET_APPOINTMENTS } from '../../graphql/queries';
+import { CREATE_APPOINTMENT_MUTATION } from '../../graphql/mutations';
 import BigCalendar from '../../components/calendar/BigCalendar';
 import AppointmentListItem from '../../components/appointments/AppointmentListItem';
 import AppointmentModal from '../../components/appointments/AppointmentModal';
-import { sampleAppointments, Appointment } from '../../sampleData';
 import { Calendar as CalendarIcon, List } from 'lucide-react';
 
+interface Appointment {
+  id: string;
+  title: string;
+  date: Date;
+  time: string;
+  type: 'meeting' | 'doctor' | 'personal' | 'work';
+  color: string;
+  notes?: string;
+}
+
+interface GraphQLAppointment {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  type: string;
+  color: string;
+  notes?: string;
+}
+
+interface AppointmentsData {
+  appointments: GraphQLAppointment[];
+}
+
 const CalendarPage: React.FC = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>(sampleAppointments);
+  const [view, setView] = useState<'calendar' | 'list'>('calendar');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
-  const [view, setView] = useState<'list' | 'calendar'>('list');
 
-  const handleCreateAppointment = (newAppointment: Omit<Appointment, 'id'>) => {
-    const appointment: Appointment = {
-      ...newAppointment,
-      id: String(appointments.length + 1),
-    };
-    setAppointments([...appointments, appointment]);
+  // Fetch appointments
+  const { loading, error, data, refetch } = useQuery<AppointmentsData>(GET_APPOINTMENTS);
+
+  // Create appointment mutation
+  const [createAppointment] = useMutation(CREATE_APPOINTMENT_MUTATION, {
+    onCompleted: () => {
+      refetch();
+      setIsModalOpen(false);
+      setEditingAppointment(null);
+    },
+    onError: (error) => {
+      console.error('Error creating appointment:', error);
+      alert('Failed to create appointment: ' + error.message);
+    },
+  });
+
+  const handleSaveAppointment = (appointmentData: Omit<Appointment, 'id'>) => {
+    if (editingAppointment) {
+      // TODO: Implement update mutation
+      console.log('Update appointment:', editingAppointment.id, appointmentData);
+      alert('Update functionality coming soon!');
+      setIsModalOpen(false);
+      setEditingAppointment(null);
+    } else {
+      // Create new appointment
+      createAppointment({
+        variables: {
+          appointmentInput: {
+            title: appointmentData.title,
+            date: appointmentData.date.toISOString(),
+            time: appointmentData.time,
+            type: appointmentData.type,
+            color: appointmentData.color,
+            notes: appointmentData.notes || null,
+          },
+        },
+      });
+    }
   };
 
   const handleEditAppointment = (appointment: Appointment) => {
@@ -24,18 +81,11 @@ const CalendarPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveAppointment = (updatedAppointment: Omit<Appointment, 'id'>) => {
-    if (editingAppointment) {
-      setAppointments(
-        appointments.map((apt) =>
-          apt.id === editingAppointment.id
-            ? { ...updatedAppointment, id: apt.id }
-            : apt
-        )
-      );
-      setEditingAppointment(null);
-    } else {
-      handleCreateAppointment(updatedAppointment);
+  const handleDeleteAppointment = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this appointment?')) {
+      // TODO: Implement delete mutation
+      console.log('Delete appointment:', id);
+      alert('Delete functionality coming soon!');
     }
   };
 
@@ -44,53 +94,81 @@ const CalendarPage: React.FC = () => {
     setEditingAppointment(null);
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading appointments...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <p className="font-semibold">Error loading appointments</p>
+        <p className="text-sm">{error.message}</p>
+      </div>
+    );
+  }
+
+  // Convert GraphQL data to component format
+  const appointments: Appointment[] = data?.appointments.map(apt => ({
+    id: String(apt.id),
+    title: apt.title,
+    date: new Date(apt.date),
+    time: apt.time,
+    type: apt.type as 'meeting' | 'doctor' | 'personal' | 'work',
+    color: apt.color,
+    notes: apt.notes,
+  })) || [];
+
   // Sort appointments by date
-  const sortedAppointments = [...appointments].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
-  );
+  const sortedAppointments = [...appointments].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  // Group by upcoming and past
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const upcomingAppointments = sortedAppointments.filter(
-    (apt) => apt.date >= today
-  );
-  const pastAppointments = sortedAppointments.filter((apt) => apt.date < today);
+  // Separate upcoming and past appointments
+  const now = new Date();
+  const upcomingAppointments = sortedAppointments.filter(apt => apt.date >= now);
+  const pastAppointments = sortedAppointments.filter(apt => apt.date < now);
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Calendar</h1>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-3">
           {/* View Toggle */}
-          <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+          <div className="flex bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setView('list')}
-              className={`px-3 py-2 flex items-center gap-2 transition-colors ${
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 view === 'list'
-                  ? 'bg-primary text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               <List className="w-4 h-4" />
-              List
             </button>
             <button
               onClick={() => setView('calendar')}
-              className={`px-3 py-2 flex items-center gap-2 transition-colors ${
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 view === 'calendar'
-                  ? 'bg-primary text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               <CalendarIcon className="w-4 h-4" />
-              Calendar
             </button>
           </div>
 
+          {/* New Appointment Button */}
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setEditingAppointment(null);
+              setIsModalOpen(true);
+            }}
             className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors"
           >
             + New Appointment
@@ -98,26 +176,26 @@ const CalendarPage: React.FC = () => {
         </div>
       </div>
 
-      {view === 'list' ? (
-        <div className="space-y-8">
+      {/* Calendar/List View */}
+      {view === 'calendar' ? (
+        <BigCalendar appointments={appointments} />
+      ) : (
+        <div className="space-y-6">
           {/* Upcoming Appointments */}
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Upcoming ({upcomingAppointments.length})
-            </h2>
-            {upcomingAppointments.length > 0 ? (
+            <h2 className="text-xl font-semibold mb-4">Upcoming</h2>
+            {upcomingAppointments.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">No upcoming appointments</p>
+            ) : (
               <div className="space-y-3">
                 {upcomingAppointments.map((appointment) => (
                   <AppointmentListItem
                     key={appointment.id}
                     appointment={appointment}
-                    onEdit={handleEditAppointment}
+                    onEdit={() => handleEditAppointment(appointment)}
+                    onDelete={() => handleDeleteAppointment(appointment.id)}
                   />
                 ))}
-              </div>
-            ) : (
-              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center">
-                <p className="text-gray-600">No upcoming appointments</p>
               </div>
             )}
           </div>
@@ -125,23 +203,20 @@ const CalendarPage: React.FC = () => {
           {/* Past Appointments */}
           {pastAppointments.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                Past ({pastAppointments.length})
-              </h2>
+              <h2 className="text-xl font-semibold mb-4">Past</h2>
               <div className="space-y-3 opacity-60">
                 {pastAppointments.map((appointment) => (
                   <AppointmentListItem
                     key={appointment.id}
                     appointment={appointment}
-                    onEdit={handleEditAppointment}
+                    onEdit={() => handleEditAppointment(appointment)}
+                    onDelete={() => handleDeleteAppointment(appointment.id)}
                   />
                 ))}
               </div>
             </div>
           )}
         </div>
-      ) : (
-        <BigCalendar appointments={appointments} />
       )}
 
       {/* Appointment Modal */}
