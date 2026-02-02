@@ -217,7 +217,10 @@ const CalendarPage: React.FC = () => {
 
       {/* Calendar/List View */}
       {view === 'calendar' ? (
-        <BigCalendar appointments={appointments} />
+        <BigCalendar 
+          appointments={appointments} 
+          onEdit={handleEditAppointment}
+        />
       ) : (
         <div className="space-y-6">
           {/* Upcoming Appointments */}

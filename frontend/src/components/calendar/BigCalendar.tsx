@@ -22,6 +22,7 @@ const localizer = dateFnsLocalizer({
 
 interface BigCalendarProps {
   appointments: Appointment[];
+  onEdit?: (appointment: Appointment) => void;
 }
 
 interface CalendarEvent {
@@ -32,7 +33,7 @@ interface CalendarEvent {
   resource?: Appointment;
 }
 
-const BigCalendar: React.FC<BigCalendarProps> = ({ appointments }) => {
+const BigCalendar: React.FC<BigCalendarProps> = ({ appointments, onEdit }) => {
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -157,8 +158,10 @@ const BigCalendar: React.FC<BigCalendarProps> = ({ appointments }) => {
               </button>
               <button
                 onClick={() => {
-                  // TODO: Implement edit functionality
-                  console.log('Edit appointment:', selectedAppointment);
+                  if (onEdit && selectedAppointment) {
+                    onEdit(selectedAppointment);
+                    handleCloseModal();
+                  }
                 }}
                 className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
               >

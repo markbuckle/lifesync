@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
-import { Appointment } from '../../sampleData';
+
+interface Appointment {
+  id: string;
+  title: string;
+  date: Date;
+  time: string;
+  type: 'meeting' | 'doctor' | 'personal' | 'work';
+  color: string;
+  notes?: string;
+}
 
 interface AppointmentModalProps {
   isOpen: boolean;
@@ -24,6 +33,28 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     type: editingAppointment?.type || 'meeting',
     notes: '',
   });
+
+  // Update form when editingAppointment changes
+  useEffect(() => {
+    if (editingAppointment) {
+      setFormData({
+        title: editingAppointment.title,
+        date: editingAppointment.date.toISOString().split('T')[0],
+        time: editingAppointment.time,
+        type: editingAppointment.type,
+        notes: editingAppointment.notes || '',
+      });
+    } else {
+      // Reset form for new appointment
+      setFormData({
+        title: '',
+        date: new Date().toISOString().split('T')[0],
+        time: '09:00 AM',
+        type: 'meeting',
+        notes: '',
+      });
+    }
+  }, [editingAppointment, isOpen]);
 
   const typeColors: Record<string, string> = {
     meeting: '#3B82F6',
