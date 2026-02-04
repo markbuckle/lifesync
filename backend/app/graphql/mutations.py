@@ -265,3 +265,81 @@ class Mutation:
         context.db.commit()
         
         return appointment_data
+    
+    @strawberry.mutation
+    def update_task(self, id: int, task_input: TaskInput, info: Info) -> Task:
+        """Update an existing task (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the task
+        db_task = context.db.query(TaskModel).filter(
+            TaskModel.id == id,
+            TaskModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_task:
+            raise Exception("Task not found")
+        
+        # Update fields
+        db_task.title = task_input.title
+        db_task.completed = task_input.completed
+        db_task.priority = task_input.priority
+        db_task.due_date = task_input.due_date
+        db_task.category = task_input.category
+        db_task.notes = task_input.notes
+        
+        context.db.commit()
+        context.db.refresh(db_task)
+        
+        return Task(
+            id=db_task.id,
+            user_id=db_task.user_id,
+            title=db_task.title,
+            completed=db_task.completed,
+            priority=db_task.priority,
+            due_date=db_task.due_date,
+            category=db_task.category,
+            notes=db_task.notes,
+            created_at=db_task.created_at,
+            updated_at=db_task.updated_at
+        )
+    
+    @strawberry.mutation
+    def delete_task(self, id: int, info: Info) -> Task:
+        """Delete a task (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the task
+        db_task = context.db.query(TaskModel).filter(
+            TaskModel.id == id,
+            TaskModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_task:
+            raise Exception("Task not found")
+        
+        # Store data before deletion
+        task_data = Task(
+            id=db_task.id,
+            user_id=db_task.user_id,
+            title=db_task.title,
+            completed=db_task.completed,
+            priority=db_task.priority,
+            due_date=db_task.due_date,
+            category=db_task.category,
+            notes=db_task.notes,
+            created_at=db_task.created_at,
+            updated_at=db_task.updated_at
+        )
+        
+        # Delete
+        context.db.delete(db_task)
+        context.db.commit()
+        
+        return task_data

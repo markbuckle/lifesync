@@ -91,3 +91,25 @@ export const DELETE_APPOINTMENT_MUTATION = gql`
     }
   }
 `;
+
+export const UPDATE_TASK_MUTATION = gql`
+  mutation UpdateTask($id: Int!, $taskInput: TaskInput!) {
+    updateTask(id: $id, taskInput: $taskInput) {
+      id
+      title
+      completed
+      priority
+      dueDate
+      category
+      notes
+    }
+  }
+`;
+
+export const DELETE_TASK_MUTATION = gql`
+  mutation DeleteTask($id: Int!) {
+    deleteTask(id: $id) {
+      id
+    }
+  }
+`;
