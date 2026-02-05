@@ -343,3 +343,84 @@ class Mutation:
         context.db.commit()
         
         return task_data
+    
+    @strawberry.mutation
+    def update_project(self, id: int, project_input: ProjectInput, info: Info) -> Project:
+        """Update an existing project (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the project
+        db_project = context.db.query(ProjectModel).filter(
+            ProjectModel.id == id,
+            ProjectModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_project:
+            raise Exception("Project not found")
+        
+        # Update fields
+        db_project.name = project_input.name
+        db_project.progress = project_input.progress
+        db_project.status = project_input.status
+        db_project.due_date = project_input.due_date
+        db_project.tasks_completed = project_input.tasks_completed
+        db_project.tasks_total = project_input.tasks_total
+        db_project.description = project_input.description
+        
+        context.db.commit()
+        context.db.refresh(db_project)
+        
+        return Project(
+            id=db_project.id,
+            user_id=db_project.user_id,
+            name=db_project.name,
+            progress=db_project.progress,
+            status=db_project.status,
+            due_date=db_project.due_date,
+            tasks_completed=db_project.tasks_completed,
+            tasks_total=db_project.tasks_total,
+            description=db_project.description,
+            created_at=db_project.created_at,
+            updated_at=db_project.updated_at
+        )
+    
+    @strawberry.mutation
+    def delete_project(self, id: int, info: Info) -> Project:
+        """Delete a project (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the project
+        db_project = context.db.query(ProjectModel).filter(
+            ProjectModel.id == id,
+            ProjectModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_project:
+            raise Exception("Project not found")
+        
+        # Store data before deletion
+        project_data = Project(
+            id=db_project.id,
+            user_id=db_project.user_id,
+            name=db_project.name,
+            progress=db_project.progress,
+            status=db_project.status,
+            due_date=db_project.due_date,
+            tasks_completed=db_project.tasks_completed,
+            tasks_total=db_project.tasks_total,
+            description=db_project.description,
+            created_at=db_project.created_at,
+            updated_at=db_project.updated_at
+        )
+        
+        # Delete
+        context.db.delete(db_project)
+        context.db.commit()
+        
+        return project_data

@@ -113,3 +113,26 @@ export const DELETE_TASK_MUTATION = gql`
     }
   }
 `;
+
+export const UPDATE_PROJECT_MUTATION = gql`
+  mutation UpdateProject($id: Int!, $projectInput: ProjectInput!) {
+    updateProject(id: $id, projectInput: $projectInput) {
+      id
+      name
+      progress
+      status
+      dueDate
+      tasksCompleted
+      tasksTotal
+      description
+    }
+  }
+`;
+
+export const DELETE_PROJECT_MUTATION = gql`
+  mutation DeleteProject($id: Int!) {
+    deleteProject(id: $id) {
+      id
+    }
+  }
+`;
