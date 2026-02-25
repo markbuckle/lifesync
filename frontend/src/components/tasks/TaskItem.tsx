@@ -1,14 +1,25 @@
 import React from 'react';
-import { CheckSquare, Square, Circle } from 'lucide-react';
-import { Task } from '../../sampleData';
+import { CheckSquare, Square, Circle, X } from 'lucide-react';
 import { format } from 'date-fns';
+
+interface Task {
+  id: string;
+  title: string;
+  completed: boolean;
+  priority: 'high' | 'medium' | 'low';
+  dueDate: Date;
+  category: string;
+  notes?: string;
+}
 
 interface TaskItemProps {
   task: Task;
-  onToggle: (taskId: string) => void;
+  onToggle: () => void;
+  onDelete: () => void;
+  onEdit: () => void;
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onDelete, onEdit }) => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high':
@@ -47,7 +58,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle }) => {
     >
       {/* Checkbox */}
       <button
-        onClick={() => onToggle(task.id)}
+        onClick={onToggle}
         className="flex-shrink-0 mt-0.5 text-gray-400 hover:text-primary transition-colors"
       >
         {task.completed ? (
@@ -90,6 +101,29 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle }) => {
           <span>•</span>
           <span>{task.category}</span>
         </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center gap-1">
+        {/* Edit Button */}
+        <button
+          onClick={onEdit}
+          className="flex-shrink-0 text-gray-400 hover:text-primary transition-colors p-1 rounded hover:bg-gray-100"
+          title="Edit task"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+
+        {/* Delete Button */}
+        <button
+          onClick={onDelete}
+          className="flex-shrink-0 text-gray-400 hover:text-red-600 transition-colors p-1 rounded hover:bg-red-50"
+          title="Delete task"
+        >
+          <X className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

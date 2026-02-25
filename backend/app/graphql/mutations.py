@@ -187,3 +187,240 @@ class Mutation:
             created_at=db_project.created_at,
             updated_at=db_project.updated_at
         )
+    
+    @strawberry.mutation
+    def update_appointment(self, id: int, appointment_input: AppointmentInput, info: Info) -> Appointment:
+        """Update an existing appointment (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the appointment
+        db_appointment = context.db.query(AppointmentModel).filter(
+            AppointmentModel.id == id,
+            AppointmentModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_appointment:
+            raise Exception("Appointment not found")
+        
+        # Update fields
+        db_appointment.title = appointment_input.title
+        db_appointment.date = appointment_input.date
+        db_appointment.time = appointment_input.time
+        db_appointment.type = appointment_input.type
+        db_appointment.color = appointment_input.color
+        db_appointment.notes = appointment_input.notes
+        
+        context.db.commit()
+        context.db.refresh(db_appointment)
+        
+        return Appointment(
+            id=db_appointment.id,
+            user_id=db_appointment.user_id,
+            title=db_appointment.title,
+            date=db_appointment.date,
+            time=db_appointment.time,
+            type=db_appointment.type,
+            color=db_appointment.color,
+            notes=db_appointment.notes,
+            created_at=db_appointment.created_at,
+            updated_at=db_appointment.updated_at
+        )
+    
+    @strawberry.mutation
+    def delete_appointment(self, id: int, info: Info) -> Appointment:
+        """Delete an appointment (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the appointment
+        db_appointment = context.db.query(AppointmentModel).filter(
+            AppointmentModel.id == id,
+            AppointmentModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_appointment:
+            raise Exception("Appointment not found")
+        
+        # Store data before deletion
+        appointment_data = Appointment(
+            id=db_appointment.id,
+            user_id=db_appointment.user_id,
+            title=db_appointment.title,
+            date=db_appointment.date,
+            time=db_appointment.time,
+            type=db_appointment.type,
+            color=db_appointment.color,
+            notes=db_appointment.notes,
+            created_at=db_appointment.created_at,
+            updated_at=db_appointment.updated_at
+        )
+        
+        # Delete
+        context.db.delete(db_appointment)
+        context.db.commit()
+        
+        return appointment_data
+    
+    @strawberry.mutation
+    def update_task(self, id: int, task_input: TaskInput, info: Info) -> Task:
+        """Update an existing task (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the task
+        db_task = context.db.query(TaskModel).filter(
+            TaskModel.id == id,
+            TaskModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_task:
+            raise Exception("Task not found")
+        
+        # Update fields
+        db_task.title = task_input.title
+        db_task.completed = task_input.completed
+        db_task.priority = task_input.priority
+        db_task.due_date = task_input.due_date
+        db_task.category = task_input.category
+        db_task.notes = task_input.notes
+        
+        context.db.commit()
+        context.db.refresh(db_task)
+        
+        return Task(
+            id=db_task.id,
+            user_id=db_task.user_id,
+            title=db_task.title,
+            completed=db_task.completed,
+            priority=db_task.priority,
+            due_date=db_task.due_date,
+            category=db_task.category,
+            notes=db_task.notes,
+            created_at=db_task.created_at,
+            updated_at=db_task.updated_at
+        )
+    
+    @strawberry.mutation
+    def delete_task(self, id: int, info: Info) -> Task:
+        """Delete a task (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the task
+        db_task = context.db.query(TaskModel).filter(
+            TaskModel.id == id,
+            TaskModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_task:
+            raise Exception("Task not found")
+        
+        # Store data before deletion
+        task_data = Task(
+            id=db_task.id,
+            user_id=db_task.user_id,
+            title=db_task.title,
+            completed=db_task.completed,
+            priority=db_task.priority,
+            due_date=db_task.due_date,
+            category=db_task.category,
+            notes=db_task.notes,
+            created_at=db_task.created_at,
+            updated_at=db_task.updated_at
+        )
+        
+        # Delete
+        context.db.delete(db_task)
+        context.db.commit()
+        
+        return task_data
+    
+    @strawberry.mutation
+    def update_project(self, id: int, project_input: ProjectInput, info: Info) -> Project:
+        """Update an existing project (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the project
+        db_project = context.db.query(ProjectModel).filter(
+            ProjectModel.id == id,
+            ProjectModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_project:
+            raise Exception("Project not found")
+        
+        # Update fields
+        db_project.name = project_input.name
+        db_project.progress = project_input.progress
+        db_project.status = project_input.status
+        db_project.due_date = project_input.due_date
+        db_project.tasks_completed = project_input.tasks_completed
+        db_project.tasks_total = project_input.tasks_total
+        db_project.description = project_input.description
+        
+        context.db.commit()
+        context.db.refresh(db_project)
+        
+        return Project(
+            id=db_project.id,
+            user_id=db_project.user_id,
+            name=db_project.name,
+            progress=db_project.progress,
+            status=db_project.status,
+            due_date=db_project.due_date,
+            tasks_completed=db_project.tasks_completed,
+            tasks_total=db_project.tasks_total,
+            description=db_project.description,
+            created_at=db_project.created_at,
+            updated_at=db_project.updated_at
+        )
+    
+    @strawberry.mutation
+    def delete_project(self, id: int, info: Info) -> Project:
+        """Delete a project (requires authentication)"""
+        context: Context = info.context
+        
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        
+        # Get the project
+        db_project = context.db.query(ProjectModel).filter(
+            ProjectModel.id == id,
+            ProjectModel.user_id == context.current_user.id
+        ).first()
+        
+        if not db_project:
+            raise Exception("Project not found")
+        
+        # Store data before deletion
+        project_data = Project(
+            id=db_project.id,
+            user_id=db_project.user_id,
+            name=db_project.name,
+            progress=db_project.progress,
+            status=db_project.status,
+            due_date=db_project.due_date,
+            tasks_completed=db_project.tasks_completed,
+            tasks_total=db_project.tasks_total,
+            description=db_project.description,
+            created_at=db_project.created_at,
+            updated_at=db_project.updated_at
+        )
+        
+        # Delete
+        context.db.delete(db_project)
+        context.db.commit()
+        
+        return project_data

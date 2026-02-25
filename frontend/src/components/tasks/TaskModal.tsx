@@ -1,89 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 
-interface Appointment {
+interface Task {
   id: string;
   title: string;
-  date: Date;
-  time: string;
-  type: 'meeting' | 'doctor' | 'personal' | 'work';
-  color: string;
+  completed: boolean;
+  priority: 'high' | 'medium' | 'low';
+  dueDate: Date;
+  category: string;
   notes?: string;
 }
 
-interface AppointmentModalProps {
+interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (appointment: Omit<Appointment, 'id'>) => void;
-  editingAppointment?: Appointment | null;
+  onSave: (task: Omit<Task, 'id'>) => void;
+  editingTask?: Task | null;
 }
 
-const AppointmentModal: React.FC<AppointmentModalProps> = ({
+const TaskModal: React.FC<TaskModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  editingAppointment,
+  editingTask,
 }) => {
   const [formData, setFormData] = useState({
-    title: editingAppointment?.title || '',
-    date: editingAppointment?.date
-      ? editingAppointment.date.toISOString().split('T')[0]
-      : new Date().toISOString().split('T')[0],
-    time: editingAppointment?.time || '09:00 AM',
-    type: editingAppointment?.type || 'meeting',
+    title: '',
+    completed: false,
+    priority: 'medium',
+    dueDate: new Date().toISOString().split('T')[0],
+    category: 'Work',
     notes: '',
   });
 
-  // Update form when editingAppointment changes
+  // Update form when editingTask changes
   useEffect(() => {
-    if (editingAppointment) {
+    if (editingTask) {
       setFormData({
-        title: editingAppointment.title,
-        date: editingAppointment.date.toISOString().split('T')[0],
-        time: editingAppointment.time,
-        type: editingAppointment.type,
-        notes: editingAppointment.notes || '',
+        title: editingTask.title,
+        completed: editingTask.completed,
+        priority: editingTask.priority,
+        dueDate: editingTask.dueDate.toISOString().split('T')[0],
+        category: editingTask.category,
+        notes: editingTask.notes || '',
       });
     } else {
-      // Reset form for new appointment
+      // Reset form for new task
       setFormData({
         title: '',
-        date: new Date().toISOString().split('T')[0],
-        time: '09:00 AM',
-        type: 'meeting',
+        completed: false,
+        priority: 'medium',
+        dueDate: new Date().toISOString().split('T')[0],
+        category: 'Work',
         notes: '',
       });
     }
-  }, [editingAppointment, isOpen]);
-
-  const typeColors: Record<string, string> = {
-    meeting: '#3B82F6',
-    doctor: '#10B981',
-    personal: '#8B5CF6',
-    work: '#B85C38',
-  };
+  }, [editingTask, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const newAppointment: Omit<Appointment, 'id'> = {
+    const newTask: Omit<Task, 'id'> = {
       title: formData.title,
-      date: new Date(formData.date),
-      time: formData.time,
-      type: formData.type as 'meeting' | 'doctor' | 'personal' | 'work',
-      color: typeColors[formData.type],
+      completed: formData.completed,
+      priority: formData.priority as 'high' | 'medium' | 'low',
+      dueDate: new Date(formData.dueDate),
+      category: formData.category,
+      notes: formData.notes || undefined,
     };
 
-    onSave(newAppointment);
+    onSave(newTask);
     handleClose();
   };
 
   const handleClose = () => {
     setFormData({
       title: '',
-      date: new Date().toISOString().split('T')[0],
-      time: '09:00 AM',
-      type: 'meeting',
+      completed: false,
+      priority: 'medium',
+      dueDate: new Date().toISOString().split('T')[0],
+      category: 'Work',
       notes: '',
     });
     onClose();
@@ -92,17 +88,26 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type } = e.target;
+    
+    if (type === 'checkbox') {
+      setFormData({
+        ...formData,
+        [name]: (e.target as HTMLInputElement).checked,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title={editingAppointment ? 'Edit Appointment' : 'New Appointment'}
+      title={editingTask ? 'Edit Task' : 'New Task'}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title */}
@@ -117,58 +122,73 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="Team meeting"
+            placeholder="Task title"
           />
         </div>
 
-        {/* Date */}
+        {/* Priority */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Date
-          </label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-
-        {/* Time */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Time
-          </label>
-          <input
-            type="text"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="9:00 AM"
-          />
-        </div>
-
-        {/* Type */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Type
+            Priority
           </label>
           <select
-            name="type"
-            value={formData.type}
+            name="priority"
+            value={formData.priority}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
-            <option value="meeting">Meeting</option>
-            <option value="doctor">Doctor</option>
-            <option value="personal">Personal</option>
-            <option value="work">Work</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
           </select>
         </div>
+
+        {/* Due Date */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Due Date
+          </label>
+          <input
+            type="date"
+            name="dueDate"
+            value={formData.dueDate}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        {/* Category */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Category
+          </label>
+          <input
+            type="text"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Work, Personal, etc."
+          />
+        </div>
+
+        {/* Completed Checkbox */}
+        {editingTask && (
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              name="completed"
+              checked={formData.completed}
+              onChange={handleChange}
+              className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
+            />
+            <label className="ml-2 text-sm font-medium text-gray-700">
+              Mark as completed
+            </label>
+          </div>
+        )}
 
         {/* Notes (optional) */}
         <div>
@@ -198,7 +218,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             type="submit"
             className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
           >
-            {editingAppointment ? 'Update' : 'Create'}
+            {editingTask ? 'Update' : 'Create'}
           </button>
         </div>
       </form>
@@ -206,4 +226,4 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   );
 };
 
-export default AppointmentModal;
+export default TaskModal;

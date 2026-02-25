@@ -69,3 +69,70 @@ export const CREATE_PROJECT_MUTATION = gql`
     }
   }
 `;
+
+export const UPDATE_APPOINTMENT_MUTATION = gql`
+  mutation UpdateAppointment($id: Int!, $appointmentInput: AppointmentInput!) {
+    updateAppointment(id: $id, appointmentInput: $appointmentInput) {
+      id
+      title
+      date
+      time
+      type
+      color
+      notes
+    }
+  }
+`;
+
+export const DELETE_APPOINTMENT_MUTATION = gql`
+  mutation DeleteAppointment($id: Int!) {
+    deleteAppointment(id: $id) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_TASK_MUTATION = gql`
+  mutation UpdateTask($id: Int!, $taskInput: TaskInput!) {
+    updateTask(id: $id, taskInput: $taskInput) {
+      id
+      title
+      completed
+      priority
+      dueDate
+      category
+      notes
+    }
+  }
+`;
+
+export const DELETE_TASK_MUTATION = gql`
+  mutation DeleteTask($id: Int!) {
+    deleteTask(id: $id) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_PROJECT_MUTATION = gql`
+  mutation UpdateProject($id: Int!, $projectInput: ProjectInput!) {
+    updateProject(id: $id, projectInput: $projectInput) {
+      id
+      name
+      progress
+      status
+      dueDate
+      tasksCompleted
+      tasksTotal
+      description
+    }
+  }
+`;
+
+export const DELETE_PROJECT_MUTATION = gql`
+  mutation DeleteProject($id: Int!) {
+    deleteProject(id: $id) {
+      id
+    }
+  }
+`;
