@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     # Database
-    DATABASE_URL: str
+    DATABASE_URL: str = "sqlite:///./lifesync.db"
     
     # Security
     SECRET_KEY: str
@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     
     # CORS
     FRONTEND_URL: str = "http://localhost:3000"
+
+    # Optional: Firestore (for future AI integration)
+    GOOGLE_CLOUD_PROJECT: Optional[str] = None
+    FIRESTORE_COLLECTION: Optional[str] = "ai_conversations"
     
     class Config:
         env_file = ".env"

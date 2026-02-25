@@ -3,6 +3,8 @@ venv/
 env/
 ENV/
 .venv/
+.env.example
+.env-copy
 
 # Python
 __pycache__/
@@ -46,3 +48,6 @@ wheels/
 # OS
 .DS_Store
 Thumbs.db
+
+#README
+README.deployment.md
