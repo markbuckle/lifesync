@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -9,7 +9,37 @@ import {
   CalendarDays,
 } from 'lucide-react';
 
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, visible };
+}
+
+const revealClass = (visible: boolean) =>
+  `transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`;
+
 const HomePage: React.FC = () => {
+  const features = useScrollReveal();
+  const howItWorks = useScrollReveal();
+  const cta = useScrollReveal();
+
   return (
     <div>
       {/* Hero Section */}
@@ -88,11 +118,11 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-background">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 md:py-24 bg-background">
+        <div ref={features.ref} className={`max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 ${revealClass(features.visible)}`}>
           <div className="text-center mb-16">
             <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Everything you need</p>
-            <h2 className="text-4xl font-bold text-gray-900">Built for how you actually work</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Built for how you actually work</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -137,7 +167,7 @@ const HomePage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1.5">{title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{description}</p>
+                  <p className="text-gray-600 text-base leading-relaxed">{description}</p>
                 </div>
               </div>
             ))}
@@ -146,11 +176,11 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-24 bg-secondary">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 md:py-24 bg-secondary">
+        <div ref={howItWorks.ref} className={`max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 ${revealClass(howItWorks.visible)}`}>
           <div className="text-center mb-16">
             <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Simple by design</p>
-            <h2 className="text-4xl font-bold text-gray-900">How it works</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">How it works</h2>
           </div>
 
           <div className="flex flex-col md:flex-row items-start gap-12 md:gap-6">
@@ -177,7 +207,7 @@ const HomePage: React.FC = () => {
                     <span className="text-2xl font-bold text-white">{step}</span>
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed max-w-xs">{description}</p>
+                  <p className="text-gray-600 text-base leading-relaxed max-w-xs">{description}</p>
                 </div>
                 {index < arr.length - 1 && (
                   <>
@@ -199,8 +229,8 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Closing CTA Section */}
-      <section className="py-28 bg-gray-900">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-16 md:py-24 bg-gray-900">
+        <div ref={cta.ref} className={`max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center ${revealClass(cta.visible)}`}>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
             Ready to take back your time?
           </h2>
