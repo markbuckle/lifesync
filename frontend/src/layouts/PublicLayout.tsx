@@ -33,21 +33,21 @@ const PublicLayout: React.FC = () => {
       <nav 
         className={`
           fixed left-0 right-0 z-50
-          transition-all duration-400 ease-in-out
-          ${isScrolled 
-            ? 'top-3 left-3 right-3 rounded-full backdrop-blur-[40px] bg-white/5 shadow-sm' 
+          transition-all duration-500 ease-in-out
+          ${isScrolled
+            ? 'top-3 left-3 right-3 rounded-full backdrop-blur-[40px] bg-white/5 shadow-sm'
             : 'top-0 bg-white'
           }
         `}
       >
         <div className={`
           mx-auto px-4 sm:px-6 lg:px-8
-          transition-all duration-400 ease-in-out
+          transition-all duration-500 ease-in-out
           ${isScrolled ? 'max-w-7xl rounded-2xl' : 'max-w-7xl'}
         `}>
           <div className={`
             flex justify-between items-center
-            transition-all duration-400 ease-in-out
+            transition-all duration-500 ease-in-out
             ${isScrolled ? 'h-14' : 'h-16'}
           `}>
             <div className="flex items-center">
@@ -56,13 +56,13 @@ const PublicLayout: React.FC = () => {
                   src="/logo.svg" 
                   alt="LifeSync Logo" 
                   className={`
-                    w-auto transition-all duration-400 ease-in-out
+                    w-auto transition-all duration-500 ease-in-out
                     ${isScrolled ? 'h-6' : 'h-8'}
                   `}
                 />
                 <span className={`
                   font-bold text-primary font-architects [transform:scaleY(1.1)] mt-0.5
-                  transition-all duration-400 ease-in-out
+                  transition-all duration-500 ease-in-out
                   ${isScrolled ? 'text-xl' : 'text-2xl'}
                 `}>
                   LifeSync
@@ -74,7 +74,7 @@ const PublicLayout: React.FC = () => {
               <Link 
                 to="/features" 
                 className={`
-                  transition-all duration-400 ease-in-out
+                  transition-all duration-500 ease-in-out
                   ${isScrolled ? 'text-sm' : 'text-base'}
                   ${isScrolled && isDarkBackground 
                     ? 'text-white hover:text-gray-200' 
@@ -87,7 +87,7 @@ const PublicLayout: React.FC = () => {
               <Link 
                 to="/pricing" 
                 className={`
-                  transition-all duration-400 ease-in-out
+                  transition-all duration-500 ease-in-out
                   ${isScrolled ? 'text-sm' : 'text-base'}
                   ${isScrolled && isDarkBackground 
                     ? 'text-white hover:text-gray-200' 
@@ -102,7 +102,7 @@ const PublicLayout: React.FC = () => {
                   to="/login"
                   className={`
                     bg-primary text-white rounded-full hover:bg-primary-dark 
-                    transition-all duration-400 ease-in-out font-medium
+                    transition-all duration-500 ease-in-out font-medium
                     ${isScrolled ? 'px-5 py-2 text-sm' : 'px-6 py-2.5 text-base'}
                   `}
                 >
@@ -112,7 +112,7 @@ const PublicLayout: React.FC = () => {
                   to="/signup"
                   className={`
                     border-2 border-primary text-primary rounded-full 
-                    hover:bg-primary hover:text-white transition-all duration-400 ease-in-out font-medium
+                    hover:bg-primary hover:text-white transition-all duration-500 ease-in-out font-medium
                     ${isScrolled ? 'px-3.5 py-1.5 text-sm' : 'px-4 py-2 text-base'}
                   `}
                 >
