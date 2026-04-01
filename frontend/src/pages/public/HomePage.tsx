@@ -144,6 +144,59 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* How It Works Section */}
+      <section className="py-24 bg-secondary">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Simple by design</p>
+            <h2 className="text-4xl font-bold text-gray-900">How it works</h2>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-start gap-12 md:gap-6">
+            {[
+              {
+                step: 1,
+                title: 'Connect your calendar',
+                description: 'Link your existing calendar in seconds. LifeSync imports your events and learns your schedule.',
+              },
+              {
+                step: 2,
+                title: 'Add your tasks & projects',
+                description: 'Create tasks, set deadlines, and group them into projects. Everything lives in one place.',
+              },
+              {
+                step: 3,
+                title: 'Let the AI handle the rest',
+                description: 'Our AI surfaces what needs attention, suggests priorities, and keeps your day running smoothly.',
+              },
+            ].map(({ step, title, description }, index, arr) => (
+              <React.Fragment key={step}>
+                <div className="flex flex-col items-center text-center flex-1">
+                  <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center mb-5 flex-shrink-0">
+                    <span className="text-2xl font-bold text-white">{step}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed max-w-xs">{description}</p>
+                </div>
+                {index < arr.length - 1 && (
+                  <>
+                    {/* Horizontal connector (desktop) */}
+                    <div className="hidden md:flex items-center self-start mt-8 flex-shrink-0">
+                      <div className="w-8 h-px bg-primary/30"></div>
+                      <div className="w-2 h-2 rounded-full bg-primary/40"></div>
+                    </div>
+                    {/* Vertical connector (mobile) */}
+                    <div className="flex md:hidden flex-col items-center self-center -my-4">
+                      <div className="w-px h-8 bg-primary/30"></div>
+                    </div>
+                  </>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
