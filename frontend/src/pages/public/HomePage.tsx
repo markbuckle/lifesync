@@ -1,5 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  CalendarCheck,
+  CheckSquare,
+  FolderKanban,
+  Sparkles,
+  CalendarDays,
+} from 'lucide-react';
 
 const HomePage: React.FC = () => {
   return (
@@ -40,7 +48,7 @@ const HomePage: React.FC = () => {
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed">
-            LifeSync uses AI to unify your tasks, calendar, and projects — so you spend less time organizing and more time doing what matters.
+            LifeSync uses AI to unify your tasks, calendar, and projects - so you spend less time organizing and more time doing what matters.
           </p>
 
           {/* CTA Buttons */}
@@ -79,28 +87,60 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Content Section */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-primary">
-            Testing Terracotta Color
-          </h2>
+      {/* Features Section */}
+      <section className="py-24 bg-background">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Everything you need</p>
+            <h2 className="text-4xl font-bold text-gray-900">Built for how you actually work</h2>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-primary">
-              <h3 className="text-xl font-semibold mb-3 text-primary">Card 1</h3>
-              <p className="text-gray-600">Testing background colors</p>
-            </div>
-
-            <div className="bg-secondary p-8 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Card 2</h3>
-              <p className="text-gray-600">Testing secondary beige</p>
-            </div>
-
-            <div className="bg-primary text-white p-8 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Card 3</h3>
-              <p className="text-white opacity-90">Testing primary terracotta</p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                icon: LayoutDashboard,
+                title: 'Smart Dashboard',
+                description: 'Get a unified view of your day - upcoming events, pending tasks, and project status at a glance.',
+              },
+              {
+                icon: CalendarCheck,
+                title: 'Appointment Booking',
+                description: 'Let others book time with you through shareable scheduling links that respect your availability.',
+              },
+              {
+                icon: CheckSquare,
+                title: 'Task Management',
+                description: 'Create, prioritize, and track tasks with due dates and statuses so nothing slips through the cracks.',
+              },
+              {
+                icon: FolderKanban,
+                title: 'Project Tracker',
+                description: 'Organize work into projects with milestones and task breakdowns to keep larger goals on track.',
+              },
+              {
+                icon: Sparkles,
+                title: 'AI Assistant',
+                description: 'Ask questions, get summaries, or let the AI suggest how to structure your day based on your workload.',
+              },
+              {
+                icon: CalendarDays,
+                title: 'Calendar Integration',
+                description: 'See all your events in one calendar that syncs with your tasks and project deadlines automatically.',
+              },
+            ].map(({ icon: Icon, title, description }) => (
+              <div
+                key={title}
+                className="bg-white rounded-2xl p-8 border border-primary/20 hover:shadow-md transition-shadow duration-300 flex gap-5 items-start"
+              >
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-primary" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1.5">{title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
