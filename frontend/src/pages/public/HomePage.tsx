@@ -197,6 +197,32 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Closing CTA Section */}
+      <section className="py-28 bg-gray-900">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
+            Ready to take back your time?
+          </h2>
+          <p className="text-white/75 text-lg mb-10 leading-relaxed">
+            Join thousands of people who use LifeSync to stay organized, focused, and in control - without the chaos.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/signup"
+              className="px-8 py-3.5 bg-primary hover:bg-primary-dark text-white font-semibold rounded-full transition-all duration-300 shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 text-base"
+            >
+              Get started free
+            </Link>
+            <Link
+              to="/features"
+              className="px-8 py-3.5 border-2 border-white/50 hover:border-white text-white font-semibold rounded-full transition-all duration-300 hover:bg-white/10 text-base"
+            >
+              See how it works
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
