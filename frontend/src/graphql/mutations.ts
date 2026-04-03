@@ -136,3 +136,21 @@ export const DELETE_PROJECT_MUTATION = gql`
     }
   }
 `;
+
+export const REQUEST_PASSWORD_RESET_MUTATION = gql`
+  mutation RequestPasswordReset($email: String!) {
+    requestPasswordReset(email: $email) {
+      success
+      message
+    }
+  }
+`;
+
+export const RESET_PASSWORD_MUTATION = gql`
+  mutation ResetPassword($token: String!, $newPassword: String!) {
+    resetPassword(token: $token, newPassword: $newPassword) {
+      success
+      message
+    }
+  }
+`;

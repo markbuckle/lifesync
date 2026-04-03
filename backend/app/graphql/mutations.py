@@ -6,7 +6,8 @@ from app.graphql.types import (
     User, AuthPayload, UserCreateInput, UserLoginInput,
     Appointment, AppointmentInput,
     Task, TaskInput,
-    Project, ProjectInput
+    Project, ProjectInput,
+    MessagePayload,
 )
 from app.graphql.context import Context
 from app.services.user_service import create_user, authenticate_user, get_user_by_email
@@ -422,5 +423,74 @@ class Mutation:
         # Delete
         context.db.delete(db_project)
         context.db.commit()
-        
+
         return project_data
+
+    @strawberry.mutation
+    def request_password_reset(self, email: str, info: Info) -> MessagePayload:
+        """Request a password reset link — sends email via Resend, falls back to console."""
+        import secrets
+        from datetime import datetime, timedelta
+        from app.models.password_reset import PasswordResetToken
+        from app.services.email_service import send_password_reset_email
+
+        context: Context = info.context
+        user = get_user_by_email(context.db, email)
+
+        if user:
+            token = secrets.token_urlsafe(32)
+            expires_at = datetime.utcnow() + timedelta(hours=1)
+            reset_token = PasswordResetToken(
+                user_id=user.id,
+                token=token,
+                expires_at=expires_at,
+            )
+            context.db.add(reset_token)
+            context.db.commit()
+
+            reset_link = f"{settings.FRONTEND_URL}/reset-password/{token}"
+            sent = send_password_reset_email(email, reset_link)
+            if not sent:
+                # Fallback: log to console when email is not configured
+                print(f"\n{'=' * 50}")
+                print(f"PASSWORD RESET (email not configured)")
+                print(f"Email  : {email}")
+                print(f"Link   : {reset_link}")
+                print(f"Expires: {expires_at} UTC")
+                print(f"{'=' * 50}\n")
+
+        # Always succeed — never reveal whether the email exists
+        return MessagePayload(
+            success=True,
+            message="If an account with that email exists, a password reset link has been sent.",
+        )
+
+    @strawberry.mutation
+    def reset_password(self, token: str, new_password: str, info: Info) -> MessagePayload:
+        """Reset a user's password using a valid reset token"""
+        from datetime import datetime
+        from app.models.password_reset import PasswordResetToken
+        from app.core.security import get_password_hash
+
+        context: Context = info.context
+
+        reset_token = context.db.query(PasswordResetToken).filter(
+            PasswordResetToken.token == token,
+            PasswordResetToken.used == False,  # noqa: E712
+        ).first()
+
+        if not reset_token:
+            raise Exception("Invalid or expired reset link.")
+
+        if datetime.utcnow() > reset_token.expires_at:
+            raise Exception("This reset link has expired. Please request a new one.")
+
+        if len(new_password) < 8:
+            raise Exception("Password must be at least 8 characters.")
+
+        user = context.db.query(UserModel).filter(UserModel.id == reset_token.user_id).first()
+        user.hashed_password = get_password_hash(new_password)
+        reset_token.used = True
+        context.db.commit()
+
+        return MessagePayload(success=True, message="Your password has been reset successfully.")

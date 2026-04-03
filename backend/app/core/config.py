@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     # CORS
     FRONTEND_URL: str = "http://localhost:3000"
 
+    # Email (Resend)
+    RESEND_API_KEY: Optional[str] = None
+    EMAIL_FROM: str = "LifeSync <noreply@lifesync.app>"
+
     # Optional: Firestore (for future AI integration)
     GOOGLE_CLOUD_PROJECT: Optional[str] = None
     FIRESTORE_COLLECTION: Optional[str] = "ai_conversations"
