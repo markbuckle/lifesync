@@ -39,7 +39,7 @@ const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({ onSelectPrompt }) =
             <button
               key={prompt.id}
               onClick={() => onSelectPrompt(prompt.text)}
-              className="flex items-start gap-2.5 p-3 rounded-lg bg-primary text-white transition-all hover:shadow-md hover:scale-[1.02] text-left"
+              className="flex items-start gap-2.5 p-3 rounded-lg bg-light text-white transition-all hover:shadow-md hover:scale-[1.02] text-left"
             >
               <Icon className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span className="text-xs font-medium leading-tight">{prompt.text}</span>

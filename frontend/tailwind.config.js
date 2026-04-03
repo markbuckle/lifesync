@@ -22,12 +22,14 @@ module.exports = {
           dark: 'var(--color-background-dark)',
         },
         terracotta: 'var(--color-terracotta)',
+        light: 'var(--color-terracotta-light)',
         cream: 'var(--color-cream)',
         beige: 'var(--color-beige)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         'architects': ['Architects Daughter', 'cursive'],
+        'playfair': ['Playfair Display', 'Georgia', 'serif'],
       },
       spacing: {
         '18': '4.5rem',

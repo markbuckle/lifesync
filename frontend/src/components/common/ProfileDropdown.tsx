@@ -66,7 +66,7 @@ const ProfileDropdown: React.FC = () => {
           {/* Menu Items */}
           <div className="py-2">
             <Link
-              to="/settings"
+              to="/profile"
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-gray-700"
             >
@@ -83,16 +83,14 @@ const ProfileDropdown: React.FC = () => {
               <span>Settings</span>
             </Link>
 
-            <button
-              onClick={() => {
-                setIsOpen(false);
-                // TODO: Open help/support page
-              }}
-              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-gray-700"
+            <Link
+              to="/help"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-gray-700"
             >
               <HelpCircle className="w-5 h-5" />
               <span>Help & Support</span>
-            </button>
+            </Link>
           </div>
 
           {/* Logout */}

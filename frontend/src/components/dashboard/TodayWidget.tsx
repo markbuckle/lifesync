@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, CheckSquare } from 'lucide-react';
+import { Calendar, CheckSquare, CalendarX2, CheckCheck } from 'lucide-react';
 import { Appointment, Task } from '../../sampleData';
 import { format } from 'date-fns';
 
@@ -18,13 +18,13 @@ const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments, tasks }) => {
   );
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4 text-primary flex items-center">
+    <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-primary">
+      <h2 className="text-base font-semibold mb-3 text-primary flex items-center">
         <Calendar className="w-5 h-5 mr-2" />
         Today
       </h2>
       
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Appointments Section */}
         <div>
           <h3 className="text-sm font-medium text-gray-700 mb-2">Appointments</h3>
@@ -43,7 +43,10 @@ const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments, tasks }) => {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">No appointments today</p>
+            <div className="flex flex-col items-center py-3 text-gray-400">
+              <CalendarX2 className="w-6 h-6 mb-1 opacity-50" />
+              <p className="text-sm italic">No appointments today</p>
+            </div>
           )}
         </div>
 
@@ -60,13 +63,16 @@ const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments, tasks }) => {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">No tasks due today</p>
+            <div className="flex flex-col items-center py-3 text-gray-400">
+              <CheckCheck className="w-6 h-6 mb-1 opacity-50" />
+              <p className="text-sm italic">No tasks due today</p>
+            </div>
           )}
         </div>
       </div>
 
       {/* Summary */}
-      <div className="mt-4 pt-4 border-t border-gray-200">
+      <div className="mt-3 pt-3 border-t border-gray-200">
         <p className="text-sm text-gray-600">
           {todayAppointments.length} appointment{todayAppointments.length !== 1 ? 's' : ''} • {todayTasks.length} task{todayTasks.length !== 1 ? 's' : ''}
         </p>
