@@ -37,6 +37,11 @@ This project showcases skills for:
 - Firestore - NoSQL for AI conversations and logs
 - Docker containerization
 
+### Authentication
+- All auth goes through GraphQL
+- JWT expiration tokens
+- Secret key cryptography
+
 ### Infrastructure
 - Frontend: Vercel
 - Backend: Google Cloud Run
