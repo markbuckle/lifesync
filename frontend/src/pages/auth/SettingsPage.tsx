@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import SettingsSection from '../../components/settings/SettingsSection';
-import { User, Bell, Palette, Lock } from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
-
-  const [profile, setProfile] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    timezone: 'America/New_York',
-  });
 
   const [notifications, setNotifications] = useState({
     emailNotifications: true,
@@ -27,13 +19,6 @@ const SettingsPage: React.FC = () => {
     timeFormat: '12h',
   });
 
-  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleNotificationToggle = (key: keyof typeof notifications) => {
     setNotifications({
       ...notifications,
@@ -48,94 +33,11 @@ const SettingsPage: React.FC = () => {
     });
   };
 
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Save to backend
-    console.log('Saving profile:', profile);
-    alert('Profile saved!');
-  };
-
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Settings</h1>
 
       <div className="space-y-6">
-        {/* Profile Section */}
-        <SettingsSection
-          title="Profile"
-          description="Manage your personal information"
-        >
-          <form onSubmit={handleSaveProfile} className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={profile.firstName}
-                  onChange={handleProfileChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={profile.lastName}
-                  onChange={handleProfileChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={profile.email}
-                onChange={handleProfileChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Timezone
-              </label>
-              <select
-                name="timezone"
-                value={profile.timezone}
-                onChange={handleProfileChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="America/New_York">Eastern Time (ET)</option>
-                <option value="America/Chicago">Central Time (CT)</option>
-                <option value="America/Denver">Mountain Time (MT)</option>
-                <option value="America/Los_Angeles">Pacific Time (PT)</option>
-                <option value="America/Halifax">Atlantic Time (AT)</option>
-              </select>
-            </div>
-
-            <div className="pt-4">
-              <button
-                type="submit"
-                className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors"
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
-        </SettingsSection>
-
         {/* Notifications Section */}
         <SettingsSection
           title="Notifications"

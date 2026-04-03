@@ -36,13 +36,13 @@ const ProjectsWidget: React.FC<ProjectsWidgetProps> = ({ projects }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4 text-primary flex items-center">
+    <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-primary">
+      <h2 className="text-base font-semibold mb-3 text-primary flex items-center">
         <Folder className="w-5 h-5 mr-2" />
         Projects
       </h2>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Project List */}
         {activeProjects.length > 0 ? (
           <div className="space-y-3">
@@ -83,7 +83,7 @@ const ProjectsWidget: React.FC<ProjectsWidgetProps> = ({ projects }) => {
       </div>
 
       {/* Summary */}
-      <div className="mt-4 pt-4 border-t border-gray-200">
+      <div className="mt-3 pt-3 border-t border-gray-200">
         <p className="text-sm text-gray-600">
           {activeProjects.length} active • {atRiskCount} need{atRiskCount !== 1 ? '' : 's'} attention
         </p>

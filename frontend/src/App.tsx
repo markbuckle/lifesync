@@ -20,6 +20,9 @@ import ProjectsPage from './pages/auth/ProjectsPage';
 import ProjectDetailPage from './pages/auth/ProjectDetailPage';
 import AIAssistantPage from './pages/auth/AIAssistantPage';
 import SettingsPage from './pages/auth/SettingsPage';
+import ProfilePage from './pages/auth/ProfilePage';
+import HelpPage from './pages/auth/HelpPage';
+import UpgradePage from './pages/auth/UpgradePage';
 
 // Styles
 import './styles/fonts.css';
@@ -47,7 +50,10 @@ function App() {
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
           <Route path="/assistant" element={<AIAssistantPage />} />
-          <Route path="/settings" element={<SettingsPage />} /> 
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/help" element={<HelpPage />} />
+          <Route path="/upgrade" element={<UpgradePage />} />
         </Route>
       </Routes>
   );
