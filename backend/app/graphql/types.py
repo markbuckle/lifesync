@@ -93,6 +93,11 @@ class Project:
     created_at: datetime
     updated_at: Optional[datetime] = None
 
+@strawberry.type
+class MessagePayload:
+    success: bool
+    message: str
+
 @strawberry.input
 class ProjectInput:
     name: str

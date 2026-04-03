@@ -9,6 +9,8 @@ import FeaturesPage from './pages/public/FeaturesPage';
 import PricingPage from './pages/public/PricingPage';
 import LoginPage from './pages/public/LoginPage';
 import SignupPage from './pages/public/SignupPage';
+import PasswordResetPage from './pages/public/PasswordResetPage';
+import SetNewPasswordPage from './pages/public/SetNewPasswordPage';
 
 // Authenticated pages
 import DashboardPage from './pages/auth/DashboardPage';
@@ -34,6 +36,8 @@ function App() {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/reset-password" element={<PasswordResetPage />} />
+          <Route path="/reset-password/:token" element={<SetNewPasswordPage />} />
 
         {/* Authenticated routes */}
         <Route element={<AuthLayout />}>
