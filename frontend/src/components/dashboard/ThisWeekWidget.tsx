@@ -24,78 +24,78 @@ const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments, tasks }) 
   );
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-primary">
-      <h2 className="text-base font-semibold mb-3 text-primary flex items-center">
-        <CalendarDays className="w-5 h-5 mr-2" />
+    <div className="bg-white p-6 rounded-xl border border-gray-200 border-t-4 border-t-primary">
+      <h2 className="text-base font-semibold mb-5 text-primary flex items-center gap-2">
+        <CalendarDays className="w-4 h-4" />
         This Week
       </h2>
 
-      <div className="space-y-3">
+      <div className="space-y-5">
         {/* Upcoming Appointments */}
         <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Upcoming</h3>
+          <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Upcoming</h3>
           {weekAppointments.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {weekAppointments.slice(0, 3).map((apt) => (
                 <div key={apt.id} className="text-sm">
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-2">
                     <div
-                      className="w-2 h-2 rounded-full mr-2"
+                      className="w-2 h-2 rounded-full flex-shrink-0"
                       style={{ backgroundColor: apt.color }}
                     />
-                    <span className="text-gray-800 font-medium">{apt.title}</span>
+                    <span className="text-gray-700 font-medium">{apt.title}</span>
                   </div>
-                  <p className="text-xs text-gray-500 ml-4">
+                  <p className="text-xs text-gray-400 ml-4 mt-0.5">
                     {format(apt.date, 'EEE, MMM d')} at {apt.time}
                   </p>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center py-3 text-gray-400">
-              <CalendarX2 className="w-6 h-6 mb-1 opacity-50" />
-              <p className="text-sm italic">No appointments this week</p>
+            <div className="flex flex-col items-center py-4 text-gray-300">
+              <CalendarX2 className="w-5 h-5 mb-1.5" />
+              <p className="text-xs">No appointments this week</p>
             </div>
           )}
         </div>
 
         {/* Tasks This Week */}
         <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Tasks</h3>
+          <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Tasks</h3>
           {weekTasks.length > 0 ? (
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="bg-primary/10 rounded-lg p-2">
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="bg-primary/10 rounded-lg p-3">
                 <p className="text-2xl font-bold text-primary">
                   {weekTasks.filter((t) => t.priority === 'high').length}
                 </p>
-                <p className="text-xs text-primary">High</p>
+                <p className="text-xs text-primary mt-0.5">High</p>
               </div>
-              <div className="bg-secondary rounded-lg p-2">
+              <div className="bg-secondary rounded-lg p-3">
                 <p className="text-2xl font-bold text-primary-dark">
                   {weekTasks.filter((t) => t.priority === 'medium').length}
                 </p>
-                <p className="text-xs text-primary-dark">Medium</p>
+                <p className="text-xs text-primary-dark mt-0.5">Medium</p>
               </div>
-              <div className="bg-background-dark rounded-lg p-2">
+              <div className="bg-background-dark rounded-lg p-3">
                 <p className="text-2xl font-bold text-gray-600">
                   {weekTasks.filter((t) => t.priority === 'low').length}
                 </p>
-                <p className="text-xs text-gray-600">Low</p>
+                <p className="text-xs text-gray-600 mt-0.5">Low</p>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center py-3 text-gray-400">
-              <CheckCheck className="w-6 h-6 mb-1 opacity-50" />
-              <p className="text-sm italic">No tasks this week</p>
+            <div className="flex flex-col items-center py-4 text-gray-300">
+              <CheckCheck className="w-5 h-5 mb-1.5" />
+              <p className="text-xs">No tasks this week</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Summary */}
-      <div className="mt-3 pt-3 border-t border-gray-200">
-        <p className="text-sm text-gray-600">
-          {weekAppointments.length} appointment{weekAppointments.length !== 1 ? 's' : ''} • {weekTasks.length} task{weekTasks.length !== 1 ? 's' : ''}
+      <div className="mt-5 pt-4 border-t border-gray-100">
+        <p className="text-xs text-gray-400">
+          {weekAppointments.length} appointment{weekAppointments.length !== 1 ? 's' : ''} · {weekTasks.length} task{weekTasks.length !== 1 ? 's' : ''}
         </p>
       </div>
     </div>

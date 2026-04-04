@@ -18,63 +18,63 @@ const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments, tasks }) => {
   );
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-primary">
-      <h2 className="text-base font-semibold mb-3 text-primary flex items-center">
-        <Calendar className="w-5 h-5 mr-2" />
+    <div className="bg-white p-6 rounded-xl border border-gray-200 border-t-4 border-t-primary">
+      <h2 className="text-base font-semibold mb-5 text-primary flex items-center gap-2">
+        <Calendar className="w-4 h-4" />
         Today
       </h2>
-      
-      <div className="space-y-3">
+
+      <div className="space-y-5">
         {/* Appointments Section */}
         <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Appointments</h3>
+          <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Appointments</h3>
           {todayAppointments.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {todayAppointments.map((apt) => (
-                <div key={apt.id} className="flex items-center text-sm">
+                <div key={apt.id} className="flex items-center text-sm gap-2">
                   <div
-                    className="w-2 h-2 rounded-full mr-2"
+                    className="w-2 h-2 rounded-full flex-shrink-0"
                     style={{ backgroundColor: apt.color }}
                   />
-                  <span className="text-gray-600">{apt.time}</span>
-                  <span className="mx-2">•</span>
-                  <span className="text-gray-800">{apt.title}</span>
+                  <span className="text-gray-400 tabular-nums">{apt.time}</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="text-gray-700">{apt.title}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center py-3 text-gray-400">
-              <CalendarX2 className="w-6 h-6 mb-1 opacity-50" />
-              <p className="text-sm italic">No appointments today</p>
+            <div className="flex flex-col items-center py-4 text-gray-300">
+              <CalendarX2 className="w-5 h-5 mb-1.5" />
+              <p className="text-xs">No appointments today</p>
             </div>
           )}
         </div>
 
         {/* Tasks Section */}
         <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Tasks Due</h3>
+          <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Tasks Due</h3>
           {todayTasks.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {todayTasks.map((task) => (
-                <div key={task.id} className="flex items-start text-sm">
-                  <CheckSquare className="w-4 h-4 mr-2 text-gray-400 mt-0.5" />
-                  <span className="text-gray-800">{task.title}</span>
+                <div key={task.id} className="flex items-start text-sm gap-2">
+                  <CheckSquare className="w-4 h-4 text-gray-300 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-700">{task.title}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center py-3 text-gray-400">
-              <CheckCheck className="w-6 h-6 mb-1 opacity-50" />
-              <p className="text-sm italic">No tasks due today</p>
+            <div className="flex flex-col items-center py-4 text-gray-300">
+              <CheckCheck className="w-5 h-5 mb-1.5" />
+              <p className="text-xs">No tasks due today</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Summary */}
-      <div className="mt-3 pt-3 border-t border-gray-200">
-        <p className="text-sm text-gray-600">
-          {todayAppointments.length} appointment{todayAppointments.length !== 1 ? 's' : ''} • {todayTasks.length} task{todayTasks.length !== 1 ? 's' : ''}
+      <div className="mt-5 pt-4 border-t border-gray-100">
+        <p className="text-xs text-gray-400">
+          {todayAppointments.length} appointment{todayAppointments.length !== 1 ? 's' : ''} · {todayTasks.length} task{todayTasks.length !== 1 ? 's' : ''}
         </p>
       </div>
     </div>
