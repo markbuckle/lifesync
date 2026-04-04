@@ -11,16 +11,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content, timestamp }) =
   const isUser = role === 'user';
 
   return (
-    <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
+    <div className={`flex gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-          <Sparkles className="w-5 h-5 text-white" />
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center mt-0.5">
+          <Sparkles className="w-4 h-4 text-white" />
         </div>
       )}
 
-      <div className={`max-w-[70%] ${isUser ? 'order-first' : ''}`}>
+      <div className={`max-w-[75%] ${isUser ? 'order-first' : ''}`}>
         <div
-          className={`rounded-2xl px-4 py-3 ${
+          className={`rounded-2xl px-5 py-3.5 ${
             isUser
               ? 'bg-primary text-white rounded-br-sm'
               : 'bg-gray-100 text-gray-800 rounded-bl-sm'
@@ -28,7 +28,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content, timestamp }) =
         >
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
         </div>
-        <p className="text-xs text-gray-500 mt-1 px-2">
+        <p className="text-xs text-gray-400 mt-1.5 px-2">
           {timestamp.toLocaleTimeString('en-US', {
             hour: 'numeric',
             minute: '2-digit',
@@ -37,8 +37,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content, timestamp }) =
       </div>
 
       {isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-light flex items-center justify-center">
-          <User className="w-5 h-5 text-primary-dark" />
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-light flex items-center justify-center mt-0.5">
+          <User className="w-4 h-4 text-primary-dark" />
         </div>
       )}
     </div>
