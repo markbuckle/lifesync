@@ -20,9 +20,18 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
+export interface GoogleCalendarEventItem {
+  id: string;
+  title: string;
+  start: string;
+  allDay: boolean;
+  color: string;
+}
+
 interface BigCalendarProps {
   appointments: Appointment[];
   onEdit?: (appointment: Appointment) => void;
+  googleEvents?: GoogleCalendarEventItem[];
 }
 
 interface CalendarEvent {
@@ -31,11 +40,21 @@ interface CalendarEvent {
   start: Date;
   end: Date;
   resource?: Appointment;
+  isGoogle?: boolean;
+  googleColor?: string;
 }
 
-const BigCalendar: React.FC<BigCalendarProps> = ({ appointments, onEdit }) => {
+const BigCalendar: React.FC<BigCalendarProps> = ({ appointments, onEdit, googleEvents = [] }) => {
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Convert Google Calendar events
+  const googleCalendarEvents: CalendarEvent[] = googleEvents.map((e) => {
+    const start = new Date(e.start);
+    const end = new Date(start);
+    if (!e.allDay) end.setHours(start.getHours() + 1);
+    return { id: `google-${e.id}`, title: e.title, start, end, isGoogle: true, googleColor: e.color };
+  });
 
   // Convert appointments to calendar events
   const events: CalendarEvent[] = appointments.map((apt) => {
@@ -61,10 +80,12 @@ const BigCalendar: React.FC<BigCalendarProps> = ({ appointments, onEdit }) => {
     };
   });
 
+  const allEvents = [...events, ...googleCalendarEvents];
+
   // Custom event style
   const eventStyleGetter = (event: CalendarEvent) => {
     const style = {
-      backgroundColor: event.resource?.color || '#B85C38',
+      backgroundColor: event.isGoogle ? (event.googleColor || '#4285F4') : (event.resource?.color || '#B85C38'),
       borderRadius: '4px',
       opacity: 0.9,
       color: 'white',
@@ -100,7 +121,7 @@ const BigCalendar: React.FC<BigCalendarProps> = ({ appointments, onEdit }) => {
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" style={{ height: '600px' }}>
         <Calendar
           localizer={localizer}
-          events={events}
+          events={allEvents}
           startAccessor="start"
           endAccessor="end"
           style={{ height: '100%' }}

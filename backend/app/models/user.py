@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text
 from sqlalchemy.sql import func
 from app.db.session import Base
 from sqlalchemy.orm import relationship
@@ -16,6 +16,11 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
+    # Google Calendar OAuth
+    google_refresh_token = Column(String, nullable=True)
+    google_calendar_email = Column(String, nullable=True)
+    google_calendar_synced_events = Column(Integer, nullable=True)
+
     # Relationships
     appointments = relationship("Appointment", back_populates="user", cascade="all, delete-orphan")
     tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")

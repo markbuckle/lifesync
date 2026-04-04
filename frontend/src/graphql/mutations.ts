@@ -137,6 +137,15 @@ export const DELETE_PROJECT_MUTATION = gql`
   }
 `;
 
+export const DISCONNECT_CALENDAR_MUTATION = gql`
+  mutation DisconnectCalendar {
+    disconnectCalendar {
+      success
+      message
+    }
+  }
+`;
+
 export const REQUEST_PASSWORD_RESET_MUTATION = gql`
   mutation RequestPasswordReset($email: String!) {
     requestPasswordReset(email: $email) {

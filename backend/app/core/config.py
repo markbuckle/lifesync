@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     RESEND_API_KEY: Optional[str] = None
     EMAIL_FROM: str = "LifeSync <noreply@lifesync.app>"
 
+    # Google Calendar OAuth
+    GOOGLE_CLIENT_ID: Optional[str] = None
+    GOOGLE_CLIENT_SECRET: Optional[str] = None
+    GOOGLE_REDIRECT_URI: str = "http://localhost:8000/auth/google/calendar/callback"
+
     # Optional: Firestore (for future AI integration)
     GOOGLE_CLOUD_PROJECT: Optional[str] = None
     FIRESTORE_COLLECTION: Optional[str] = "ai_conversations"
