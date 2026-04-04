@@ -36,24 +36,23 @@ const ProjectsWidget: React.FC<ProjectsWidgetProps> = ({ projects }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-primary">
-      <h2 className="text-base font-semibold mb-3 text-primary flex items-center">
-        <Folder className="w-5 h-5 mr-2" />
+    <div className="bg-white p-6 rounded-xl border border-gray-200 border-t-4 border-t-primary">
+      <h2 className="text-base font-semibold mb-5 text-primary flex items-center gap-2">
+        <Folder className="w-4 h-4" />
         Projects
       </h2>
 
-      <div className="space-y-3">
-        {/* Project List */}
+      <div>
         {activeProjects.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {activeProjects.map((project) => (
-              <div key={project.id} className="border-b border-gray-100 pb-3 last:border-0">
+              <div key={project.id} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-medium text-gray-800">
+                  <h3 className="text-sm font-medium text-gray-700">
                     {project.name}
                   </h3>
                   <span
-                    className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${getStatusColor(
+                    className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${getStatusColor(
                       project.status
                     )}`}
                   >
@@ -61,16 +60,13 @@ const ProjectsWidget: React.FC<ProjectsWidgetProps> = ({ projects }) => {
                     {project.status.replace('-', ' ')}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-xs text-gray-600 mb-2">
-                  <span>
-                    {project.tasksCompleted}/{project.tasksTotal} tasks
-                  </span>
+                <div className="flex items-center justify-between text-xs text-gray-400 mb-2.5">
+                  <span>{project.tasksCompleted}/{project.tasksTotal} tasks</span>
                   <span>{project.progress}%</span>
                 </div>
-                {/* Progress Bar */}
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-gray-100 rounded-full h-1.5">
                   <div
-                    className="bg-primary h-2 rounded-full transition-all"
+                    className="bg-primary h-1.5 rounded-full transition-all"
                     style={{ width: `${project.progress}%` }}
                   />
                 </div>
@@ -78,14 +74,14 @@ const ProjectsWidget: React.FC<ProjectsWidgetProps> = ({ projects }) => {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">No active projects</p>
+          <p className="text-sm text-gray-400">No active projects</p>
         )}
       </div>
 
       {/* Summary */}
-      <div className="mt-3 pt-3 border-t border-gray-200">
-        <p className="text-sm text-gray-600">
-          {activeProjects.length} active • {atRiskCount} need{atRiskCount !== 1 ? '' : 's'} attention
+      <div className="mt-5 pt-4 border-t border-gray-100">
+        <p className="text-xs text-gray-400">
+          {activeProjects.length} active · {atRiskCount} need{atRiskCount !== 1 ? '' : 's'} attention
         </p>
       </div>
     </div>

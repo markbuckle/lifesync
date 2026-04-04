@@ -198,7 +198,7 @@ const ProjectsPage: React.FC = () => {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-6 mb-10 w-fit mx-auto">
         <h1 className="text-3xl font-bold">Projects</h1>
         <button
           onClick={() => {
@@ -227,11 +227,11 @@ const ProjectsPage: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex flex-wrap justify-center gap-6">
           {sortedProjects.map((project) => (
             <div
               key={project.id}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-primary transition-all hover:shadow-md"
+              className="w-72 bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-primary transition-all hover:shadow-md"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">

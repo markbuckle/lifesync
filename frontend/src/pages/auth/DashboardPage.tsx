@@ -115,14 +115,14 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       {/* Greeting header */}
-      <div className="mb-4">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold">
           {greeting()}, {data.me.firstName}
         </h1>
-        <p className="text-gray-500 mt-1">{format(new Date(), 'EEEE, MMMM d')}</p>
+        <p className="text-gray-400 mt-2 text-sm">{format(new Date(), 'EEEE, MMMM d')}</p>
 
         {/* Quick-action pills */}
-        <div className="flex flex-wrap gap-2 mt-4">
+        <div className="flex flex-wrap justify-center gap-2.5 mt-5">
           <button
             onClick={() => navigate('/tasks')}
             className="px-4 py-1.5 rounded-full border border-primary text-primary text-sm font-medium transition-all duration-150 hover:brightness-95 hover:shadow-sm active:scale-95 active:brightness-90"
@@ -147,7 +147,7 @@ const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 auto-rows-auto">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
         {/* Today Widget */}
         <TodayWidget appointments={appointments} tasks={tasks} />
 
@@ -158,12 +158,12 @@ const DashboardPage: React.FC = () => {
         <ProjectsWidget projects={projects} />
 
         {/* AI Insights Widget */}
-        <div className="bg-gradient-to-r from-primary to-primary-dark text-white p-4 rounded-2xl ring-1 ring-white/20 col-span-full">
-          <div className="flex items-start">
-            <Sparkles className="w-6 h-6 mr-3 flex-shrink-0 opacity-90" />
+        <div className="bg-gradient-to-r from-primary to-primary-dark text-white p-6 rounded-2xl ring-1 ring-white/20 col-span-full">
+          <div className="flex items-start gap-4">
+            <Sparkles className="w-5 h-5 flex-shrink-0 opacity-90 mt-0.5" />
             <div>
-              <h2 className="text-base font-semibold mb-1">AI Insight</h2>
-              <p className="opacity-90">
+              <h2 className="text-sm font-semibold mb-1.5 opacity-80 uppercase tracking-wide">AI Insight</h2>
+              <p className="text-base opacity-90 leading-relaxed">
                  {appointments.length === 0 && tasks.length === 0
                   ? "You're all caught up! Great time to plan your week or start a new project."
                   : projects.find(p => p.status === 'at-risk')
