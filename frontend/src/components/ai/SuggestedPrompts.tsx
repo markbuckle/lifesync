@@ -30,19 +30,19 @@ const suggestedPrompts = [
 
 const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({ onSelectPrompt }) => {
   return (
-    <div className="space-y-2">
-      <p className="text-xs font-medium text-gray-600">Suggested prompts:</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+    <div className="space-y-3">
+      <p className="text-xs font-medium text-gray-400 uppercase tracking-wide text-center">Example Prompts</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {suggestedPrompts.map((prompt) => {
           const Icon = prompt.icon;
           return (
             <button
               key={prompt.id}
               onClick={() => onSelectPrompt(prompt.text)}
-              className="flex items-start gap-2.5 p-3 rounded-lg bg-light text-white transition-all hover:shadow-md hover:scale-[1.02] text-left"
+              className="flex items-start gap-3 p-4 rounded-xl bg-light text-white hover:opacity-90 hover:shadow-md transition-all text-left"
             >
-              <Icon className="w-4 h-4 flex-shrink-0 mt-0.5" />
-              <span className="text-xs font-medium leading-tight">{prompt.text}</span>
+              <Icon className="w-4 h-4 flex-shrink-0 mt-0.5 opacity-80" />
+              <span className="text-sm leading-snug">{prompt.text}</span>
             </button>
           );
         })}

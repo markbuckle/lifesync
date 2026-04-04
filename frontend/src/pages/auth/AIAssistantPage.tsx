@@ -91,92 +91,93 @@ const AIAssistantPage: React.FC = () => {
     return "I'm here to help you manage your schedule, tasks, and projects! I can:\n\n• Show your upcoming appointments\n• Create and manage tasks\n• Track project progress\n• Provide productivity insights\n• Schedule events and reminders\n\nWhat would you like to do?";
   };
 
+  const inputBox = (
+    <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-4 py-4 hover:border-terracotta focus-within:border-gray-400 transition-all">
+      <textarea
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyPress}
+        placeholder="Do anything with AI..."
+        rows={2}
+        className="flex-1 resize-none focus:outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent"
+        style={{
+          minHeight: '48px',
+          maxHeight: '160px',
+        }}
+      />
+      <button
+        onClick={() => handleSendMessage()}
+        disabled={!inputValue.trim() || isTyping}
+        className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white hover:bg-primary-dark disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+      >
+        <Send className="w-4 h-4" />
+      </button>
+    </div>
+  );
+
   return (
     <div className="h-[calc(100vh-7rem)] flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold">AI Assistant</h1>
-          <p className="text-gray-600 mt-1">Your personal productivity companion</p>
-        </div>
-        {messages.length > 0 && (
-          <button
-            onClick={handleClearChat}
-            className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg hover:border-red-500 hover:text-red-600 transition-colors"
-          >
-            <Trash2 className="w-4 h-4" />
-            Clear Chat
-          </button>
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto">
+        {messages.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center px-6">
+            <div className="w-full max-w-2xl text-center mb-8">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-3xl font-semibold text-gray-800 mb-3">
+                How can I help you today?
+              </h2>
+              <p className="text-base text-gray-500">
+                Ask me anything about your schedule, tasks, or projects
+              </p>
+            </div>
+
+            {/* Input above prompts */}
+            <div className="w-full max-w-2xl mb-6">
+              {inputBox}
+            </div>
+
+            <div className="w-full max-w-2xl">
+              <SuggestedPrompts onSelectPrompt={handleSuggestedPrompt} />
+            </div>
+          </div>
+        ) : (
+          <div className="max-w-2xl mx-auto px-6 py-10 space-y-6">
+            <div className="flex justify-end">
+              <button
+                onClick={handleClearChat}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Clear chat
+              </button>
+            </div>
+            {messages.map((message) => (
+              <ChatMessage
+                key={message.id}
+                role={message.role}
+                content={message.content}
+                timestamp={message.timestamp}
+              />
+            ))}
+            {isTyping && <TypingIndicator />}
+            <div ref={messagesEndRef} />
+          </div>
         )}
       </div>
 
-      {/* Chat Container */}
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden">
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {messages.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center px-4">
-              <div className="text-center mb-6">
-                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Sparkles className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-xl font-semibold text-gray-800 mb-1">
-                  How can I help you today?
-                </h2>
-                <p className="text-sm text-gray-600">
-                  Ask me anything about your schedule, tasks, or projects
-                </p>
-              </div>
-
-              <div className="w-full max-w-2xl">
-                <SuggestedPrompts onSelectPrompt={handleSuggestedPrompt} />
-              </div>
-            </div>
-          ) : (
-            <>
-              {messages.map((message) => (
-                <ChatMessage
-                  key={message.id}
-                  role={message.role}
-                  content={message.content}
-                  timestamp={message.timestamp}
-                />
-              ))}
-              {isTyping && <TypingIndicator />}
-              <div ref={messagesEndRef} />
-            </>
-          )}
-        </div>
-
-        {/* Input Area */}
-        <div className="border-t border-gray-200 p-3 bg-gray-50">
-          <div className="flex gap-2">
-            <textarea
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyPress}
-              placeholder="Ask me anything... (Press Enter to send, Shift+Enter for new line)"
-              rows={1}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none text-sm"
-              style={{
-                minHeight: '40px',
-                maxHeight: '100px',
-              }}
-            />
-            <button
-              onClick={() => handleSendMessage()}
-              disabled={!inputValue.trim() || isTyping}
-              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-            >
-              <Send className="w-4 h-4" />
-              <span className="font-medium text-sm">Send</span>
-            </button>
+      {/* Bottom input — only shown when chat is active */}
+      {messages.length > 0 && (
+        <div className="border-t border-gray-100 py-4 px-6">
+          <div className="max-w-2xl mx-auto">
+            {inputBox}
+            <p className="text-xs text-gray-400 mt-2 text-center">
+              AI responses are simulated. Backend integration coming soon.
+            </p>
           </div>
-          <p className="text-xs text-gray-500 mt-2">
-            AI responses are simulated. Backend integration coming soon.
-          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 };
