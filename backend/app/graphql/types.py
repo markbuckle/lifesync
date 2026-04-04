@@ -98,6 +98,20 @@ class MessagePayload:
     success: bool
     message: str
 
+@strawberry.type
+class CalendarConnection:
+    connected: bool
+    email: Optional[str] = None
+    synced_events: Optional[int] = None
+
+@strawberry.type
+class GoogleCalendarEvent:
+    id: str
+    title: str
+    start: str
+    all_day: bool
+    color: str
+
 @strawberry.input
 class ProjectInput:
     name: str

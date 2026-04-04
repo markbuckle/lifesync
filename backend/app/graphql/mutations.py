@@ -427,6 +427,19 @@ class Mutation:
         return project_data
 
     @strawberry.mutation
+    def disconnect_calendar(self, info: Info) -> MessagePayload:
+        """Remove the user's stored Google Calendar tokens."""
+        context: Context = info.context
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        user = context.db.query(UserModel).filter(UserModel.id == context.current_user.id).first()
+        user.google_refresh_token = None
+        user.google_calendar_email = None
+        user.google_calendar_synced_events = None
+        context.db.commit()
+        return MessagePayload(success=True, message="Google Calendar disconnected.")
+
+    @strawberry.mutation
     def request_password_reset(self, email: str, info: Info) -> MessagePayload:
         """Request a password reset link — sends email via Resend, falls back to console."""
         import secrets

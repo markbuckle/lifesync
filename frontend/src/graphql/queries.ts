@@ -59,6 +59,28 @@ export const GET_PROJECTS = gql`
   }
 `;
 
+export const GET_CALENDAR_CONNECTION = gql`
+  query GetCalendarConnection {
+    calendarConnection {
+      connected
+      email
+      syncedEvents
+    }
+  }
+`;
+
+export const GET_GOOGLE_CALENDAR_EVENTS = gql`
+  query GetGoogleCalendarEvents {
+    googleCalendarEvents {
+      id
+      title
+      start
+      allDay
+      color
+    }
+  }
+`;
+
 export const GET_DASHBOARD_DATA = gql`
   query GetDashboardData {
     me {

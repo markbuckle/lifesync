@@ -1,7 +1,7 @@
 import strawberry
 from strawberry.types import Info
 from typing import List, Optional
-from app.graphql.types import User, Appointment, Task, Project
+from app.graphql.types import User, Appointment, Task, Project, CalendarConnection, GoogleCalendarEvent
 from app.graphql.context import Context
 from app.models.appointment import Appointment as AppointmentModel
 from app.models.task import Task as TaskModel
@@ -82,6 +82,47 @@ class Query:
             for task in db_tasks
         ]
     
+    @strawberry.field
+    def calendar_connection(self, info: Info) -> CalendarConnection:
+        """Return the current user's Google Calendar connection status."""
+        context: Context = info.context
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        user = context.current_user
+        if not user.google_refresh_token:
+            return CalendarConnection(connected=False)
+        return CalendarConnection(
+            connected=True,
+            email=user.google_calendar_email,
+            synced_events=user.google_calendar_synced_events,
+        )
+
+    @strawberry.field
+    def google_calendar_events(self, info: Info) -> List[GoogleCalendarEvent]:
+        """Fetch upcoming events from the user's connected Google Calendar."""
+        context: Context = info.context
+        if not context.current_user:
+            raise Exception("Not authenticated")
+        user = context.current_user
+        if not user.google_refresh_token:
+            return []
+        try:
+            from app.services.calendar_service import fetch_upcoming_events
+            events = fetch_upcoming_events(user.google_refresh_token)
+            return [
+                GoogleCalendarEvent(
+                    id=e['id'],
+                    title=e['title'],
+                    start=e['start'],
+                    all_day=e['all_day'],
+                    color=e['color'],
+                )
+                for e in events
+            ]
+        except Exception as e:
+            print(f"Error fetching Google Calendar events: {e}")
+            return []
+
     @strawberry.field
     def projects(self, info: Info) -> List[Project]:
         """Get all projects for current user"""
