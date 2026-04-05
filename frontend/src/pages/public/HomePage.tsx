@@ -72,8 +72,8 @@ const HomePage: React.FC = () => {
 
           {/* Headline */}
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
-            Your life,{' '}
-            <span className="text-primary-light">in sync.</span>
+            If it&apos;s mundane,{' '}<br/>
+            <span className="text-primary-light">we automate it.</span>
           </h1>
 
           {/* Subheadline */}

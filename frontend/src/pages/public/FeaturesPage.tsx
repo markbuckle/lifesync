@@ -319,8 +319,9 @@ const FeaturesPage: React.FC = () => {
           <p className="text-primary-light font-semibold text-sm uppercase tracking-widest mb-5">
             LifeSync Features
           </p>
-          <h1 className="text-6xl md:text-8xl font-black leading-none tracking-tight text-white">
-            Your life,<br />one platform
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
+            Your life,<br />
+            <span className="text-primary-light">one platform</span>
           </h1>
           <p className="text-white/70 text-lg max-w-xl mx-auto mt-6 leading-relaxed">
             LifeSync brings your tasks, calendar, projects and AI assistant into one beautifully unified experience.
