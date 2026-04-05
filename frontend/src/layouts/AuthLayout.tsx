@@ -12,7 +12,7 @@ const AuthLayout: React.FC = () => {
     { name: 'Dashboard', href: '/dashboard', icon: House },
     { name: 'Calendar', href: '/calendar', icon: CalendarDays },
     { name: 'Tasks', href: '/tasks', icon: ListTodo },
-    { name: 'Projects', href: '/projects', icon: FolderDot },
+    // { name: 'Projects', href: '/projects', icon: FolderDot },
     { name: 'AI Assistant', href: '/assistant', icon: BotMessageSquare },
   ];
 

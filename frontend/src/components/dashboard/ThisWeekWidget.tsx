@@ -17,11 +17,13 @@ const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments, tasks }) 
     isWithinInterval(apt.date, { start: weekStart, end: weekEnd })
   );
 
-  const weekTasks = tasks.filter(
-    (task) =>
-      !task.completed &&
-      isWithinInterval(task.dueDate, { start: weekStart, end: weekEnd })
-  );
+  const weekTasks = tasks
+    .filter(
+      (task) =>
+        !task.completed &&
+        isWithinInterval(task.dueDate, { start: weekStart, end: weekEnd })
+    )
+    .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 border-t-4 border-t-primary">
@@ -59,29 +61,25 @@ const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments, tasks }) 
           )}
         </div>
 
-        {/* Tasks This Week */}
+        {/* Tasks Due This Week */}
         <div>
-          <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Tasks</h3>
+          <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Tasks Due</h3>
           {weekTasks.length > 0 ? (
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="bg-primary/10 rounded-lg p-3">
-                <p className="text-2xl font-bold text-primary">
-                  {weekTasks.filter((t) => t.priority === 'high').length}
-                </p>
-                <p className="text-xs text-primary mt-0.5">High</p>
-              </div>
-              <div className="bg-secondary rounded-lg p-3">
-                <p className="text-2xl font-bold text-primary-dark">
-                  {weekTasks.filter((t) => t.priority === 'medium').length}
-                </p>
-                <p className="text-xs text-primary-dark mt-0.5">Medium</p>
-              </div>
-              <div className="bg-background-dark rounded-lg p-3">
-                <p className="text-2xl font-bold text-gray-600">
-                  {weekTasks.filter((t) => t.priority === 'low').length}
-                </p>
-                <p className="text-xs text-gray-600 mt-0.5">Low</p>
-              </div>
+            <div className="space-y-2.5">
+              {weekTasks.slice(0, 4).map((task) => (
+                <div key={task.id} className="flex items-center gap-2.5">
+                  <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                    task.priority === 'high' ? 'bg-primary' :
+                    task.priority === 'medium' ? 'bg-primary-light' :
+                    'bg-beige'
+                  }`} />
+                  <span className="text-sm text-gray-700 truncate flex-1">{task.title}</span>
+                  <span className="text-xs text-gray-400 flex-shrink-0">{format(task.dueDate, 'MMM d')}</span>
+                </div>
+              ))}
+              {weekTasks.length > 4 && (
+                <p className="text-xs text-gray-400 pl-4">+{weekTasks.length - 4} more</p>
+              )}
             </div>
           ) : (
             <div className="flex flex-col items-center py-4 text-gray-300">

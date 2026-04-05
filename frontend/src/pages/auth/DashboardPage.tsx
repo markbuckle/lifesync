@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { GET_DASHBOARD_DATA } from '../../graphql/queries';
 import TodayWidget from '../../components/dashboard/TodayWidget';
 import ThisWeekWidget from '../../components/dashboard/ThisWeekWidget';
-import ProjectsWidget from '../../components/dashboard/ProjectsWidget';
+// import ProjectsWidget from '../../components/dashboard/ProjectsWidget';
+import TasksSummaryWidget from '../../components/dashboard/TasksSummaryWidget';
 // import { sampleAppointments, sampleTasks, sampleProjects } from '../../sampleData';
 import { Sparkles } from 'lucide-react';
 import { format } from 'date-fns';
@@ -102,15 +103,15 @@ const DashboardPage: React.FC = () => {
     category: task.category,
   }));
 
-  const projects = data.projects.map(proj => ({
-    id: String(proj.id),
-    name: proj.name,
-    progress: proj.progress,
-    status: proj.status as 'on-track' | 'at-risk' | 'delayed',
-    dueDate: new Date(proj.dueDate),
-    tasksCompleted: proj.tasksCompleted,
-    tasksTotal: proj.tasksTotal,
-  }));
+  // const projects = data.projects.map(proj => ({
+  //   id: String(proj.id),
+  //   name: proj.name,
+  //   progress: proj.progress,
+  //   status: proj.status as 'on-track' | 'at-risk' | 'delayed',
+  //   dueDate: new Date(proj.dueDate),
+  //   tasksCompleted: proj.tasksCompleted,
+  //   tasksTotal: proj.tasksTotal,
+  // }));
 
   return (
     <div>
@@ -124,13 +125,6 @@ const DashboardPage: React.FC = () => {
         {/* Quick-action pills */}
         <div className="flex flex-wrap justify-center gap-2.5 mt-5">
           <button
-            onClick={() => navigate('/tasks')}
-            className="px-4 py-1.5 rounded-full border border-primary text-primary text-sm font-medium transition-all duration-150 hover:brightness-95 hover:shadow-sm active:scale-95 active:brightness-90"
-            style={{ backgroundColor: '#EAD5C9' }}
-          >
-            + New Task
-          </button>
-          <button
             onClick={() => navigate('/calendar')}
             className="px-4 py-1.5 rounded-full border border-primary text-primary text-sm font-medium transition-all duration-150 hover:brightness-95 hover:shadow-sm active:scale-95 active:brightness-90"
             style={{ backgroundColor: '#EAD5C9' }}
@@ -138,12 +132,19 @@ const DashboardPage: React.FC = () => {
             + New Appointment
           </button>
           <button
+            onClick={() => navigate('/tasks')}
+            className="px-4 py-1.5 rounded-full border border-primary text-primary text-sm font-medium transition-all duration-150 hover:brightness-95 hover:shadow-sm active:scale-95 active:brightness-90"
+            style={{ backgroundColor: '#EAD5C9' }}
+          >
+            + New Task
+          </button>
+          {/* <button
             onClick={() => navigate('/projects')}
             className="px-4 py-1.5 rounded-full border border-primary text-primary text-sm font-medium transition-all duration-150 hover:brightness-95 hover:shadow-sm active:scale-95 active:brightness-90"
             style={{ backgroundColor: '#EAD5C9' }}
           >
             + New Project
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -154,21 +155,25 @@ const DashboardPage: React.FC = () => {
         {/* This Week Widget */}
         <ThisWeekWidget appointments={appointments} tasks={tasks} />
 
-        {/* Projects Widget */}
+        {/* Projects Widget - uncomment to re-enable:
         <ProjectsWidget projects={projects} />
+        */}
+
+        {/* Tasks Summary Widget */}
+        <TasksSummaryWidget tasks={tasks} />
 
         {/* AI Insights Widget */}
-        <div className="bg-gradient-to-r from-primary to-primary-dark text-white p-6 rounded-2xl ring-1 ring-white/20 col-span-full">
+        <div className="bg-gradient-to-r from-gray-500 to-gray-700 text-white p-6 rounded-2xl ring-1 ring-white/10 col-span-full">
           <div className="flex items-start gap-4">
             <Sparkles className="w-5 h-5 flex-shrink-0 opacity-90 mt-0.5" />
             <div>
               <h2 className="text-sm font-semibold mb-1.5 opacity-80 uppercase tracking-wide">AI Insight</h2>
               <p className="text-base opacity-90 leading-relaxed">
                  {appointments.length === 0 && tasks.length === 0
-                  ? "You're all caught up! Great time to plan your week or start a new project."
-                  : projects.find(p => p.status === 'at-risk')
-                  ? `${projects.find(p => p.status === 'at-risk')?.name} needs attention. Consider reviewing the timeline.`
-                  : "You have a light day tomorrow. Great time to work on your projects!"}
+                  ? "You're all caught up! Great time to plan ahead or tackle something new."
+                  : tasks.filter(t => !t.completed && t.priority === 'high').length > 0
+                  ? `You have ${tasks.filter(t => !t.completed && t.priority === 'high').length} high-priority task${tasks.filter(t => !t.completed && t.priority === 'high').length !== 1 ? 's' : ''} pending. Consider tackling those first.`
+                  : "You have a light day tomorrow. Great time to get ahead on your tasks!"}
               </p>
             </div>
           </div>

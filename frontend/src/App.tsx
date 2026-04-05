@@ -16,8 +16,8 @@ import SetNewPasswordPage from './pages/public/SetNewPasswordPage';
 import DashboardPage from './pages/auth/DashboardPage';
 import CalendarPage from './pages/auth/CalendarPage';
 import TasksPage from './pages/auth/TasksPage';
-import ProjectsPage from './pages/auth/ProjectsPage';
-import ProjectDetailPage from './pages/auth/ProjectDetailPage';
+// import ProjectsPage from './pages/auth/ProjectsPage';
+// import ProjectDetailPage from './pages/auth/ProjectDetailPage';
 import AIAssistantPage from './pages/auth/AIAssistantPage';
 import SettingsPage from './pages/auth/SettingsPage';
 import ProfilePage from './pages/auth/ProfilePage';
@@ -47,8 +47,10 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/tasks" element={<TasksPage />} />
+          {/* Projects routes - uncomment to re-enable:
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
+          */}
           <Route path="/assistant" element={<AIAssistantPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
