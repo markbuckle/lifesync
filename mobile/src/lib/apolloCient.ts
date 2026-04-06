@@ -1,17 +1,28 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { HttpLink } from '@apollo/client/link/http';
 import { SetContextLink } from '@apollo/client/link/context';
+import * as SecureStore from 'expo-secure-store';
+import Constants from 'expo-constants';
+
+// On a physical device or emulator, 'localhost' resolves to the device itself.
+// Expo's hostUri gives us the dev machine's LAN IP (e.g. "192.168.1.5:8081").
+const devHost = Constants.expoConfig?.hostUri?.split(':')[0];
+const API_URL = devHost
+  ? `http://${devHost}:8000/graphql`
+  : 'http://localhost:8000/graphql';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:8000/graphql',
+  uri: API_URL,
 });
 
-const authLink = new SetContextLink((prevContext, _operation) => {
-  return {
-    headers: {
-      ...prevContext.headers,
-    },
-  };
+const authLink = new SetContextLink(async (prevContext, _operation) => {
+    const token = await SecureStore.getItemAsync('token');
+    return {
+        headers: {
+        ...prevContext.headers,
+        authorization: token ? `Bearer ${token}` : '',
+        },
+    };
 });
 
 export const client = new ApolloClient({

@@ -2,15 +2,14 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-// Screens - we'll create these next
+import { useAuth } from '../context/AuthContext';
+import { ActivityIndicator, View } from 'react-native';
+import { theme } from '../theme';
+import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
 import HomeScreen from '../screens/auth/HomeScreen';
-
-// Tab bar icons
-import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../theme';
+import DashboardScreen from '../screens/auth/DashboardScreen';
 
 // ─── Types ───────────────────────────────────────────────
 export type AuthStackParamList = {
@@ -20,7 +19,7 @@ export type AuthStackParamList = {
 };
 
 export type MainTabParamList = {
-  Home: undefined;
+  Dashboard: undefined;
 };
 
 // ─── Navigators ──────────────────────────────────────────
@@ -55,14 +54,14 @@ function MainNavigator() {
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';
-          if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
+          if (route.name === 'Dashboard') {
+            iconName = focused ? 'grid' : 'grid-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
     >
-      <MainTab.Screen name="Home" component={HomeScreen} />
+      <MainTab.Screen name="Dashboard" component={DashboardScreen} />
     </MainTab.Navigator>
   );
 }
@@ -71,11 +70,20 @@ function MainNavigator() {
 // We'll swap between Auth and Main once real auth is wired up.
 // For now we'll show Auth so we can build and test those screens.
 export default function RootNavigator() {
-  const isLoggedIn = false; // temporary — replaced in Step 4
+  const { token, isLoading } = useAuth();
+
+  // Show spinner while checking stored token on launch
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
+      {token ? <MainNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 }

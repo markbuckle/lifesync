@@ -13,8 +13,24 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation';
 import { theme } from '../../theme';
+import { useMutation } from '@apollo/client/react';
+import { LOGIN_MUTATION } from '../../graphql/mutations';
+import { useAuth } from '../../context/AuthContext';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
+
+interface LoginResponse {
+  login: {
+    accessToken: string;
+    tokenType: string;
+    user: {
+      id: number;
+      email: string;
+      firstName: string;
+      lastName: string;
+    };
+  };
+}
 
 interface Props {
   navigation: LoginScreenNavigationProp;
@@ -25,17 +41,40 @@ export default function LoginScreen({ navigation }: Props) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { login } = useAuth();
+  const [loginMutation] = useMutation<LoginResponse>(LOGIN_MUTATION, {
+    onCompleted: async (data) => {
+        await login(data.login.accessToken);
+  },
+  onError: (error) => {
+    const msg = error.message.toLowerCase();
+    if (msg.includes('incorrect') || msg.includes('invalid')) {
+    setError('Incorrect email or password');
+    } else if (msg.includes('network') || msg.includes('fetch')) {
+    setError('Unable to connect. Check your connection and try again.');
+    } else {
+    setError('Something went wrong. Please try again.');
+    }
+    setLoading(false);
+  },
+});
 
-  const handleLogin = async () => {
+const handleLogin = async () => {
     if (!email || !password) {
-      setError('Please fill in all fields');
-      return;
+        setError('Please fill in all fields');
+        return;
     }
     setError('');
     setLoading(true);
-    // Auth logic wired up in Step 4
-    setLoading(false);
-  };
+    loginMutation({
+        variables: {
+        credentials: {
+            email: email.trim().toLowerCase(),
+            password,
+        },
+        },
+    });
+};
 
   return (
     <KeyboardAvoidingView

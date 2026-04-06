@@ -13,8 +13,35 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation';
 import { theme } from '../../theme';
+import { useMutation } from '@apollo/client/react';
+import { REGISTER_MUTATION } from '../../graphql/mutations';
+import { LOGIN_MUTATION } from '../../graphql/mutations';
+import { useAuth } from '../../context/AuthContext';
 
 type SignupScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Signup'>;
+
+interface RegisterResponse {
+  register: {
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isActive: boolean;
+  };
+}
+
+interface LoginResponse {
+  login: {
+    accessToken: string;
+    tokenType: string;
+    user: {
+      id: number;
+      email: string;
+      firstName: string;
+      lastName: string;
+    };
+  };
+}
 
 interface Props {
   navigation: SignupScreenNavigationProp;
@@ -29,24 +56,67 @@ export default function SignupScreen({ navigation }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSignup = async () => {
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
-      setError('Please fill in all fields');
-      return;
+  const { login } = useAuth();
+
+const [loginMutation] = useMutation<LoginResponse>(LOGIN_MUTATION, {
+  onCompleted: async (data) => {
+    await login(data.login.accessToken);
+  },
+  onError: () => {
+    navigation.navigate('Login');
+  },
+});
+
+const [registerMutation] = useMutation<RegisterResponse>(REGISTER_MUTATION, {
+  onCompleted: async () => {
+    loginMutation({
+      variables: {
+        credentials: {
+          email: email.trim().toLowerCase(),
+          password,
+        },
+      },
+    });
+  },
+  onError: (error) => {
+    const msg = error.message.toLowerCase();
+    if (msg.includes('already registered') || msg.includes('already exists')) {
+      setError('An account with this email already exists. Try signing in.');
+    } else if (msg.includes('network') || msg.includes('fetch')) {
+      setError('Unable to connect. Check your connection and try again.');
+    } else {
+      setError('Something went wrong. Please try again.');
     }
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters');
-      return;
-    }
-    setError('');
-    setLoading(true);
-    // Auth logic wired up in Step 4
     setLoading(false);
-  };
+  },
+});
+
+const handleSignup = async () => {
+  if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    setError('Please fill in all fields');
+    return;
+  }
+  if (password !== confirmPassword) {
+    setError('Passwords do not match');
+    return;
+  }
+  if (password.length < 8) {
+    setError('Password must be at least 8 characters');
+    return;
+  }
+  setError('');
+  setLoading(true);
+  registerMutation({
+    variables: {
+      userInput: {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim().toLowerCase(),
+        password,
+      },
+    },
+  });
+};
 
   return (
     <KeyboardAvoidingView
