@@ -34,3 +34,17 @@ export const GET_DASHBOARD_DATA = gql`
     # }
   }
 `;
+
+export const GET_TASKS = gql`
+  query GetTasks {
+    tasks {
+      id
+      title
+      completed
+      priority
+      dueDate
+      category
+      notes
+    }
+  }
+`;

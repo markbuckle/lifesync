@@ -8,8 +8,9 @@ import { theme } from '../theme';
 import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
-import HomeScreen from '../screens/auth/HomeScreen';
+import HomeScreen from '../screens/main/HomeScreen';
 import DashboardScreen from '../screens/auth/DashboardScreen';
+import TasksScreen from '../screens/auth/TasksScreen';
 
 // ─── Types ───────────────────────────────────────────────
 export type AuthStackParamList = {
@@ -20,6 +21,7 @@ export type AuthStackParamList = {
 
 export type MainTabParamList = {
   Dashboard: undefined;
+  Tasks: undefined;
 };
 
 // ─── Navigators ──────────────────────────────────────────
@@ -62,6 +64,7 @@ function MainNavigator() {
       })}
     >
       <MainTab.Screen name="Dashboard" component={DashboardScreen} />
+      <MainTab.Screen name="Tasks" component={TasksScreen} />
     </MainTab.Navigator>
   );
 }
