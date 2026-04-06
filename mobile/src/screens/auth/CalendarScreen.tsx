@@ -337,17 +337,17 @@ export default function AppointmentsScreen() {
 
   const [createAppointment] = useMutation(CREATE_APPOINTMENT_MUTATION, {
     onCompleted: () => { refetch(); setModalVisible(false); },
-    onError: (e) => Alert.alert('Error', e.message),
+    onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
   const [updateAppointment] = useMutation(UPDATE_APPOINTMENT_MUTATION, {
     onCompleted: () => { refetch(); setModalVisible(false); },
-    onError: (e) => Alert.alert('Error', e.message),
+    onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
   const [deleteAppointment] = useMutation(DELETE_APPOINTMENT_MUTATION, {
     onCompleted: () => refetch(),
-    onError: (e) => Alert.alert('Error', e.message),
+    onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
   const onRefresh = async () => {
@@ -436,7 +436,7 @@ export default function AppointmentsScreen() {
   }
 
   // ── Data Processing ──────────────────────────────────
-  const allAppointments: Appointment[] = (data?.appointments ?? []).map(a => ({
+  const allAppointments: Appointment[] = (data?.appointments ?? [] as AppointmentsData['appointments']).map((a: AppointmentsData['appointments'][number]) => ({
     id: String(a.id),
     title: a.title,
     date: a.date,

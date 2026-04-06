@@ -223,17 +223,17 @@ export default function TasksScreen() {
 
   const [createTask] = useMutation(CREATE_TASK_MUTATION, {
     onCompleted: () => { refetch(); setModalVisible(false); },
-    onError: (e) => Alert.alert('Error', e.message),
+    onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
   const [updateTask] = useMutation(UPDATE_TASK_MUTATION, {
     onCompleted: () => { refetch(); setModalVisible(false); },
-    onError: (e) => Alert.alert('Error', e.message),
+    onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
   const [deleteTask] = useMutation(DELETE_TASK_MUTATION, {
     onCompleted: () => refetch(),
-    onError: (e) => Alert.alert('Error', e.message),
+    onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
   const onRefresh = async () => {
@@ -338,7 +338,7 @@ export default function TasksScreen() {
   }
 
   // ── Data Processing ──────────────────────────────────
-  const allTasks: Task[] = (data?.tasks ?? []).map(t => ({
+  const allTasks: Task[] = (data?.tasks ?? [] as TasksData['tasks']).map((t: TasksData['tasks'][number]) => ({
     id: String(t.id),
     title: t.title,
     completed: t.completed,

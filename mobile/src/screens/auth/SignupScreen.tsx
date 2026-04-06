@@ -59,7 +59,7 @@ export default function SignupScreen({ navigation }: Props) {
   const { login } = useAuth();
 
 const [loginMutation] = useMutation<LoginResponse>(LOGIN_MUTATION, {
-  onCompleted: async (data) => {
+  onCompleted: async (data: LoginResponse) => {
     await login(data.login.accessToken);
   },
   onError: () => {
@@ -78,7 +78,7 @@ const [registerMutation] = useMutation<RegisterResponse>(REGISTER_MUTATION, {
       },
     });
   },
-  onError: (error) => {
+  onError: (error: Error) => {
     const msg = error.message.toLowerCase();
     if (msg.includes('already registered') || msg.includes('already exists')) {
       setError('An account with this email already exists. Try signing in.');

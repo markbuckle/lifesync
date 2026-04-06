@@ -43,10 +43,10 @@ export default function LoginScreen({ navigation }: Props) {
   const [error, setError] = useState('');
   const { login } = useAuth();
   const [loginMutation] = useMutation<LoginResponse>(LOGIN_MUTATION, {
-    onCompleted: async (data) => {
+    onCompleted: async (data: LoginResponse) => {
         await login(data.login.accessToken);
   },
-  onError: (error) => {
+  onError: (error: Error) => {
     const msg = error.message.toLowerCase();
     if (msg.includes('incorrect') || msg.includes('invalid')) {
     setError('Incorrect email or password');

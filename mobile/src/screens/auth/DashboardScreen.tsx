@@ -133,8 +133,8 @@ export default function DashboardScreen() {
     );
   }
 
-  const tasks = data?.tasks ?? [];
-  const appointments = data?.appointments ?? [];
+  const tasks: DashboardData['tasks'] = data?.tasks ?? [];
+  const appointments: DashboardData['appointments'] = data?.appointments ?? [];
   // const projects = data?.projects ?? [];
 
   const todayAppointments = appointments.filter(a => isToday(a.date));
@@ -180,9 +180,9 @@ export default function DashboardScreen() {
           </Text>
           <Text style={styles.date}>{formatDate()}</Text>
         </View>
-        {/* <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
           <Ionicons name="log-out-outline" size={22} color={theme.colors.text.secondary} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
 
       {/* ── Stats Row ─────────────────────────────────── */}
