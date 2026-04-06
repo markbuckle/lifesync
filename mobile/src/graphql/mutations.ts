@@ -62,3 +62,39 @@ export const DELETE_TASK_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_APPOINTMENT_MUTATION = gql`
+  mutation CreateAppointment($appointmentInput: AppointmentInput!) {
+    createAppointment(appointmentInput: $appointmentInput) {
+      id
+      title
+      date
+      time
+      type
+      color
+      notes
+    }
+  }
+`;
+
+export const UPDATE_APPOINTMENT_MUTATION = gql`
+  mutation UpdateAppointment($id: Int!, $appointmentInput: AppointmentInput!) {
+    updateAppointment(id: $id, appointmentInput: $appointmentInput) {
+      id
+      title
+      date
+      time
+      type
+      color
+      notes
+    }
+  }
+`;
+
+export const DELETE_APPOINTMENT_MUTATION = gql`
+  mutation DeleteAppointment($id: Int!) {
+    deleteAppointment(id: $id) {
+      id
+    }
+  }
+`;

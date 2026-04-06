@@ -11,6 +11,7 @@ import SignupScreen from '../screens/auth/SignupScreen';
 import HomeScreen from '../screens/main/HomeScreen';
 import DashboardScreen from '../screens/auth/DashboardScreen';
 import TasksScreen from '../screens/auth/TasksScreen';
+import CalendarScreen from '../screens/auth/CalendarScreen';
 
 // ─── Types ───────────────────────────────────────────────
 export type AuthStackParamList = {
@@ -22,6 +23,7 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   Dashboard: undefined;
   Tasks: undefined;
+  Appointments: undefined;
 };
 
 // ─── Navigators ──────────────────────────────────────────
@@ -58,6 +60,10 @@ function MainNavigator() {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';
           if (route.name === 'Dashboard') {
             iconName = focused ? 'grid' : 'grid-outline';
+          } else if (route.name === 'Tasks') {
+            iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
+          } else if (route.name === 'Appointments') {
+            iconName = focused ? 'calendar' : 'calendar-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -65,6 +71,7 @@ function MainNavigator() {
     >
       <MainTab.Screen name="Dashboard" component={DashboardScreen} />
       <MainTab.Screen name="Tasks" component={TasksScreen} />
+      <MainTab.Screen name="Appointments" component={CalendarScreen} />
     </MainTab.Navigator>
   );
 }

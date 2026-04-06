@@ -48,3 +48,17 @@ export const GET_TASKS = gql`
     }
   }
 `;
+
+export const GET_APPOINTMENTS = gql`
+  query GetAppointments {
+    appointments {
+      id
+      title
+      date
+      time
+      type
+      color
+      notes
+    }
+  }
+`;
