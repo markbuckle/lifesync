@@ -13,6 +13,7 @@ import DashboardScreen from '../screens/auth/DashboardScreen';
 // import TasksScreen from '../screens/archive/TasksScreen';
 import CalendarScreen from '../screens/auth/CalendarScreen';
 import AIAssistantScreen from '../screens/auth/AIAssistantScreen';
+import ProfileScreen from '../screens/auth/ProfileScreen';
 
 // ─── Types ───────────────────────────────────────────────
 export type AuthStackParamList = {
@@ -26,6 +27,7 @@ export type MainTabParamList = {
   // Tasks: undefined;
   Appointments: undefined;
   Assistant: undefined;
+  Profile: undefined;
 };
 
 // ─── Navigators ──────────────────────────────────────────
@@ -68,6 +70,8 @@ function MainNavigator() {
             iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Assistant') {
             iconName = focused ? 'sparkles' : 'sparkles-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -77,6 +81,7 @@ function MainNavigator() {
       <MainTab.Screen name="Appointments" component={CalendarScreen} />
       {/* <MainTab.Screen name="Tasks" component={TasksScreen} /> */}
       <MainTab.Screen name="Assistant" component={AIAssistantScreen} />
+      <MainTab.Screen name="Profile" component={ProfileScreen} />
     </MainTab.Navigator>
   );
 }

@@ -62,3 +62,16 @@ export const GET_APPOINTMENTS = gql`
     }
   }
 `;
+
+export const GET_ME = gql`
+  query GetMe {
+    me {
+      id
+      email
+      firstName
+      lastName
+      isActive
+      createdAt
+    }
+  }
+`;
