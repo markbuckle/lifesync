@@ -10,8 +10,9 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
 import HomeScreen from '../screens/main/HomeScreen';
 import DashboardScreen from '../screens/auth/DashboardScreen';
-import TasksScreen from '../screens/auth/TasksScreen';
+// import TasksScreen from '../screens/archive/TasksScreen';
 import CalendarScreen from '../screens/auth/CalendarScreen';
+import AIAssistantScreen from '../screens/auth/AIAssistantScreen';
 
 // ─── Types ───────────────────────────────────────────────
 export type AuthStackParamList = {
@@ -22,8 +23,9 @@ export type AuthStackParamList = {
 
 export type MainTabParamList = {
   Dashboard: undefined;
-  Tasks: undefined;
+  // Tasks: undefined;
   Appointments: undefined;
+  Assistant: undefined;
 };
 
 // ─── Navigators ──────────────────────────────────────────
@@ -52,26 +54,29 @@ function MainNavigator() {
         tabBarStyle: {
           backgroundColor: theme.colors.white,
           borderTopColor: theme.colors.border,
-          paddingBottom: 8,
+          paddingBottom: 24,
           paddingTop: 8,
-          height: 64,
+          height: 80,
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';
           if (route.name === 'Dashboard') {
             iconName = focused ? 'grid' : 'grid-outline';
-          } else if (route.name === 'Tasks') {
-            iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
+          // } else if (route.name === 'Tasks') {
+          //   iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
           } else if (route.name === 'Appointments') {
             iconName = focused ? 'calendar' : 'calendar-outline';
+          } else if (route.name === 'Assistant') {
+            iconName = focused ? 'sparkles' : 'sparkles-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
     >
       <MainTab.Screen name="Dashboard" component={DashboardScreen} />
-      <MainTab.Screen name="Tasks" component={TasksScreen} />
       <MainTab.Screen name="Appointments" component={CalendarScreen} />
+      {/* <MainTab.Screen name="Tasks" component={TasksScreen} /> */}
+      <MainTab.Screen name="Assistant" component={AIAssistantScreen} />
     </MainTab.Navigator>
   );
 }
