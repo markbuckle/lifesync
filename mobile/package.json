@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.82.0",
     "@apollo/client": "^4.1.6",
     "@expo/ngrok": "^4.1.0",
     "@react-navigation/bottom-tabs": "^7.15.9",
