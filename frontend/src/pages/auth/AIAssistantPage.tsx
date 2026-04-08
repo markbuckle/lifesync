@@ -321,7 +321,7 @@ const AIAssistantPage: React.FC = () => {
                   How can I help you today?
                 </h2>
                 <p className="text-base text-gray-500">
-                  Ask me anything about your schedule, tasks, or projects
+                  Ask me anything about your calendar, appointments, or schedule
                 </p>
               </div>
               <div className="w-full max-w-2xl mb-6">{inputBox}</div>

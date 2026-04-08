@@ -1,14 +1,14 @@
 import React from 'react';
-import { CalendarDays, CalendarX2, CheckCheck } from 'lucide-react';
-import { Appointment, Task } from '../../sampleData';
+import { CalendarDays, CalendarX2 /* , CheckCheck */ } from 'lucide-react';
+import { Appointment /* , Task */ } from '../../sampleData';
 import { format, isWithinInterval, startOfWeek, endOfWeek } from 'date-fns';
 
 interface ThisWeekWidgetProps {
   appointments: Appointment[];
-  tasks: Task[];
+  // tasks: Task[];
 }
 
-const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments, tasks }) => {
+const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments /* , tasks */ }) => {
   const today = new Date();
   const weekStart = startOfWeek(today, { weekStartsOn: 0 }); // Sunday
   const weekEnd = endOfWeek(today, { weekStartsOn: 0 }); // Saturday
@@ -17,13 +17,13 @@ const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments, tasks }) 
     isWithinInterval(apt.date, { start: weekStart, end: weekEnd })
   );
 
-  const weekTasks = tasks
-    .filter(
-      (task) =>
-        !task.completed &&
-        isWithinInterval(task.dueDate, { start: weekStart, end: weekEnd })
-    )
-    .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+  // const weekTasks = tasks
+  //   .filter(
+  //     (task) =>
+  //       !task.completed &&
+  //       isWithinInterval(task.dueDate, { start: weekStart, end: weekEnd })
+  //   )
+  //   .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 border-t-4 border-t-primary">
@@ -61,7 +61,7 @@ const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments, tasks }) 
           )}
         </div>
 
-        {/* Tasks Due This Week */}
+        {/* Tasks Due This Week - hidden while Tasks page is disabled
         <div>
           <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Tasks Due</h3>
           {weekTasks.length > 0 ? (
@@ -88,12 +88,14 @@ const ThisWeekWidget: React.FC<ThisWeekWidgetProps> = ({ appointments, tasks }) 
             </div>
           )}
         </div>
+        */}
       </div>
 
       {/* Summary */}
       <div className="mt-5 pt-4 border-t border-gray-100">
         <p className="text-xs text-gray-400">
-          {weekAppointments.length} appointment{weekAppointments.length !== 1 ? 's' : ''} · {weekTasks.length} task{weekTasks.length !== 1 ? 's' : ''}
+          {weekAppointments.length} appointment{weekAppointments.length !== 1 ? 's' : ''}
+          {/* · {weekTasks.length} task{weekTasks.length !== 1 ? 's' : ''} */}
         </p>
       </div>
     </div>

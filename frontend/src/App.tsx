@@ -15,7 +15,7 @@ import SetNewPasswordPage from './pages/public/SetNewPasswordPage';
 // Authenticated pages
 import DashboardPage from './pages/auth/DashboardPage';
 import CalendarPage from './pages/auth/CalendarPage';
-import TasksPage from './pages/auth/TasksPage';
+// import TasksPage from './pages/auth/TasksPage';
 // import ProjectsPage from './pages/auth/ProjectsPage';
 // import ProjectDetailPage from './pages/auth/ProjectDetailPage';
 import AIAssistantPage from './pages/auth/AIAssistantPage';
@@ -46,7 +46,7 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/tasks" element={<TasksPage />} />
+          {/* <Route path="/tasks" element={<TasksPage />} /> */}
           {/* Projects routes - uncomment to re-enable:
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />

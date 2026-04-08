@@ -11,7 +11,7 @@ const AuthLayout: React.FC = () => {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: House },
     { name: 'Calendar', href: '/calendar', icon: CalendarDays },
-    { name: 'Tasks', href: '/tasks', icon: ListTodo },
+    // { name: 'Tasks', href: '/tasks', icon: ListTodo },
     // { name: 'Projects', href: '/projects', icon: FolderDot },
     { name: 'AI Assistant', href: '/assistant', icon: BotMessageSquare },
   ];

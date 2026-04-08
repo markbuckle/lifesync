@@ -1,21 +1,21 @@
 import React from 'react';
-import { Calendar, CheckSquare, CalendarX2, CheckCheck } from 'lucide-react';
-import { Appointment, Task } from '../../sampleData';
+import { Calendar, /* CheckSquare, */ CalendarX2 /* , CheckCheck */ } from 'lucide-react';
+import { Appointment /* , Task */ } from '../../sampleData';
 import { format } from 'date-fns';
 
 interface TodayWidgetProps {
   appointments: Appointment[];
-  tasks: Task[];
+  // tasks: Task[];
 }
 
-const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments, tasks }) => {
+const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments /* , tasks */ }) => {
   const todayAppointments = appointments.filter(
     (apt) => format(apt.date, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
   );
-  
-  const todayTasks = tasks.filter(
-    (task) => !task.completed && format(task.dueDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
-  );
+
+  // const todayTasks = tasks.filter(
+  //   (task) => !task.completed && format(task.dueDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
+  // );
 
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 border-t-4 border-t-primary">
@@ -50,7 +50,7 @@ const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments, tasks }) => {
           )}
         </div>
 
-        {/* Tasks Section */}
+        {/* Tasks Section - hidden while Tasks page is disabled
         <div>
           <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Tasks Due</h3>
           {todayTasks.length > 0 ? (
@@ -69,12 +69,14 @@ const TodayWidget: React.FC<TodayWidgetProps> = ({ appointments, tasks }) => {
             </div>
           )}
         </div>
+        */}
       </div>
 
       {/* Summary */}
       <div className="mt-5 pt-4 border-t border-gray-100">
         <p className="text-xs text-gray-400">
-          {todayAppointments.length} appointment{todayAppointments.length !== 1 ? 's' : ''} · {todayTasks.length} task{todayTasks.length !== 1 ? 's' : ''}
+          {todayAppointments.length} appointment{todayAppointments.length !== 1 ? 's' : ''}
+          {/* · {todayTasks.length} task{todayTasks.length !== 1 ? 's' : ''} */}
         </p>
       </div>
     </div>

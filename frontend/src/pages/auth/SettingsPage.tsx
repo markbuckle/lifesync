@@ -6,7 +6,6 @@ const SettingsPage: React.FC = () => {
   const [notifications, setNotifications] = useState({
     emailNotifications: true,
     pushNotifications: true,
-    taskReminders: true,
     appointmentReminders: true,
     weeklyDigest: false,
   });
@@ -53,8 +52,7 @@ const SettingsPage: React.FC = () => {
                   <p className="text-sm text-gray-500">
                     {key === 'emailNotifications' && 'Receive notifications via email'}
                     {key === 'pushNotifications' && 'Receive push notifications in browser'}
-                    {key === 'taskReminders' && 'Get reminders for upcoming tasks'}
-                    {key === 'appointmentReminders' && 'Get reminders for appointments'}
+{key === 'appointmentReminders' && 'Get reminders for appointments'}
                     {key === 'weeklyDigest' && 'Receive a weekly summary email'}
                   </p>
                 </div>

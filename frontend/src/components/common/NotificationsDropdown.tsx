@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, CheckCircle, AlertCircle, Calendar, X } from 'lucide-react';
-import { format } from 'date-fns';
+import { Bell, AlertCircle, Calendar, CalendarCheck, X } from 'lucide-react';
 
 interface Notification {
   id: string;
@@ -23,16 +22,16 @@ const sampleNotifications: Notification[] = [
   {
     id: '2',
     type: 'success',
-    title: 'Task Completed',
-    message: 'You completed "Review Q4 budget proposal"',
+    title: 'Appointment Confirmed',
+    message: 'Dentist appointment on Friday at 9:00 AM is confirmed',
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     read: false,
   },
   {
     id: '3',
     type: 'warning',
-    title: 'Project At Risk',
-    message: 'Mobile App Launch is falling behind schedule',
+    title: 'Schedule Conflict',
+    message: 'Client Call and Project Review overlap on Monday at 3:00 PM',
     timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
     read: true,
   },
@@ -79,7 +78,7 @@ const NotificationsDropdown: React.FC = () => {
   const getIcon = (type: string) => {
     switch (type) {
       case 'success':
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
+        return <CalendarCheck className="w-5 h-5 text-green-500" />;
       case 'warning':
         return <AlertCircle className="w-5 h-5 text-yellow-500" />;
       case 'info':

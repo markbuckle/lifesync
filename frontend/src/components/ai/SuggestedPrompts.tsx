@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, ListTodo, FolderKanban, Lightbulb } from 'lucide-react';
+import { Calendar, Lightbulb } from 'lucide-react';
 
 interface SuggestedPromptsProps {
   onSelectPrompt: (prompt: string) => void;
@@ -10,16 +10,6 @@ const suggestedPrompts = [
     id: 1,
     icon: Calendar,
     text: 'What appointments do I have this week?',
-  },
-  {
-    id: 2,
-    icon: ListTodo,
-    text: 'Create a task to review the Q4 report',
-  },
-  {
-    id: 3,
-    icon: FolderKanban,
-    text: 'Show me my projects that need attention',
   },
   {
     id: 4,

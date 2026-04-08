@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { GET_DASHBOARD_DATA } from '../../graphql/queries';
 import TodayWidget from '../../components/dashboard/TodayWidget';
 import ThisWeekWidget from '../../components/dashboard/ThisWeekWidget';
+import UpcomingWidget from '../../components/dashboard/UpcomingWidget';
 // import ProjectsWidget from '../../components/dashboard/ProjectsWidget';
-import TasksSummaryWidget from '../../components/dashboard/TasksSummaryWidget';
+// import TasksSummaryWidget from '../../components/dashboard/TasksSummaryWidget';
 // import { sampleAppointments, sampleTasks, sampleProjects } from '../../sampleData';
 import { Sparkles } from 'lucide-react';
 import { format } from 'date-fns';
@@ -131,13 +132,13 @@ const DashboardPage: React.FC = () => {
           >
             + New Appointment
           </button>
-          <button
+          {/* <button
             onClick={() => navigate('/tasks')}
             className="px-4 py-1.5 rounded-full border border-primary text-primary text-sm font-medium transition-all duration-150 hover:brightness-95 hover:shadow-sm active:scale-95 active:brightness-90"
             style={{ backgroundColor: '#EAD5C9' }}
           >
             + New Task
-          </button>
+          </button> */}
           {/* <button
             onClick={() => navigate('/projects')}
             className="px-4 py-1.5 rounded-full border border-primary text-primary text-sm font-medium transition-all duration-150 hover:brightness-95 hover:shadow-sm active:scale-95 active:brightness-90"
@@ -150,20 +151,23 @@ const DashboardPage: React.FC = () => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
         {/* Today Widget */}
-        <TodayWidget appointments={appointments} tasks={tasks} />
+        <TodayWidget appointments={appointments} />
 
         {/* This Week Widget */}
-        <ThisWeekWidget appointments={appointments} tasks={tasks} />
+        <ThisWeekWidget appointments={appointments} />
+
+        {/* Coming Up Widget */}
+        <UpcomingWidget appointments={appointments} />
 
         {/* Projects Widget - uncomment to re-enable:
         <ProjectsWidget projects={projects} />
         */}
 
         {/* Tasks Summary Widget */}
-        <TasksSummaryWidget tasks={tasks} />
+        {/* <TasksSummaryWidget tasks={tasks} /> */}
 
         {/* AI Insights Widget */}
-        <div className="bg-gradient-to-r from-gray-500 to-gray-700 text-white p-6 rounded-2xl ring-1 ring-white/10 col-span-full">
+        <div className="bg-gradient-to-r from-gray-500 to-gray-700 text-white p-6 rounded-2xl border-2 border-primary-light col-span-full">
           <div className="flex items-start gap-4">
             <Sparkles className="w-5 h-5 flex-shrink-0 opacity-90 mt-0.5" />
             <div>
