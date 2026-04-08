@@ -16,13 +16,26 @@ import {
 import { Calendar } from 'react-native-calendars';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
-import { GET_APPOINTMENTS } from '../../graphql/queries';
+import * as SecureStore from 'expo-secure-store';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
+import Constants from 'expo-constants';
+import {
+  GET_APPOINTMENTS,
+  GET_CALENDAR_CONNECTION,
+  GET_GOOGLE_CALENDAR_EVENTS,
+} from '../../graphql/queries';
 import {
   CREATE_APPOINTMENT_MUTATION,
   UPDATE_APPOINTMENT_MUTATION,
   DELETE_APPOINTMENT_MUTATION,
+  DISCONNECT_CALENDAR_MUTATION,
 } from '../../graphql/mutations';
 import { theme } from '../../theme';
+
+const API_BASE_URL = (Constants.expoConfig?.extra?.apiBaseUrl as string) ?? 'http://localhost:8000';
+// const devHost = Constants.expoGoConfig?.debuggerHost?.split(':')[0];
+// const API_BASE = devHost ? `http://${devHost}:8000` : 'http://localhost:8000';
 
 // ─── Types ───────────────────────────────────────────────
 type AppointmentType = 'meeting' | 'doctor' | 'personal' | 'work';
@@ -47,6 +60,26 @@ interface AppointmentsData {
     color: string;
     notes?: string;
   }>;
+}
+
+interface CalendarConnectionData {
+  calendarConnection: {
+    connected: boolean;
+    email: string | null;
+    syncedEvents: number | null;
+  };
+}
+
+interface GoogleEvent {
+  id: string;
+  title: string;
+  start: string;
+  allDay: boolean;
+  color: string;
+}
+
+interface GoogleCalendarEventsData {
+  googleCalendarEvents: GoogleEvent[];
 }
 
 // ─── Helpers ─────────────────────────────────────────────
@@ -335,6 +368,50 @@ export default function AppointmentsScreen() {
 
   const { data, loading, error, refetch } = useQuery<AppointmentsData>(GET_APPOINTMENTS);
 
+  // Google Calendar connection
+  const { data: calendarConnectionData, refetch: refetchConnection } =
+    useQuery<CalendarConnectionData>(GET_CALENDAR_CONNECTION);
+  const calendarConnection = calendarConnectionData?.calendarConnection;
+
+  const { data: googleEventsData } = useQuery<GoogleCalendarEventsData>(GET_GOOGLE_CALENDAR_EVENTS, {
+    skip: !calendarConnection?.connected,
+  });
+  const googleEvents: GoogleEvent[] = googleEventsData?.googleCalendarEvents ?? [];
+
+  const [disconnectCalendar] = useMutation(DISCONNECT_CALENDAR_MUTATION, {
+    onCompleted: () => refetchConnection(),
+    onError: (e: Error) => Alert.alert('Error', e.message),
+  });
+
+  const handleConnectGoogle = async () => {
+    const token = await SecureStore.getItemAsync('token');
+    if (!token) return;
+
+    const deepLink = Linking.createURL('calendar');
+    const authUrl = `${API_BASE_URL}/auth/google/calendar?token=${token}&mobile_redirect=${encodeURIComponent(deepLink)}`;
+
+    const result = await WebBrowser.openAuthSessionAsync(authUrl, deepLink);
+    if (result.type === 'success') {
+      const url = result.url;
+      if (url.includes('calendar_connected=true')) {
+        refetchConnection();
+      } else if (url.includes('error=')) {
+        Alert.alert('Connection Failed', 'Could not connect Google Calendar. Please try again.');
+      }
+    }
+  };
+
+  const handleDisconnect = () => {
+    Alert.alert(
+      'Disconnect Google Calendar',
+      'Are you sure you want to disconnect Google Calendar?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Disconnect', style: 'destructive', onPress: () => disconnectCalendar() },
+      ]
+    );
+  };
+
   const [createAppointment] = useMutation(CREATE_APPOINTMENT_MUTATION, {
     onCompleted: () => { refetch(); setModalVisible(false); },
     onError: (e: Error) => Alert.alert('Error', e.message),
@@ -446,17 +523,31 @@ export default function AppointmentsScreen() {
     notes: a.notes,
   }));
 
-  const appointmentDates = new Set(
-    allAppointments.map(a => new Date(a.date).toISOString().split('T')[0])
+  const googleEventDates = new Set(
+    googleEvents.map(e => new Date(e.start).toISOString().split('T')[0])
   );
+
+  const appointmentDates = new Set([
+    ...allAppointments.map(a => new Date(a.date).toISOString().split('T')[0]),
+    ...googleEventDates,
+  ]);
 
   const selectedAppointments = allAppointments
     .filter(a => new Date(a.date).toISOString().split('T')[0] === selectedDate)
     .sort((a, b) => a.time.localeCompare(b.time));
 
+  const selectedGoogleEvents = googleEvents
+    .filter(e => new Date(e.start).toISOString().split('T')[0] === selectedDate)
+    .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+
   const upcomingAppointments = allAppointments
     .filter(a => !isPast(a.date) && new Date(a.date).toISOString().split('T')[0] !== selectedDate)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 5);
+
+  const upcomingGoogleEvents = googleEvents
+    .filter(e => !isPast(e.start) && new Date(e.start).toISOString().split('T')[0] !== selectedDate)
+    .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
     .slice(0, 5);
 
   return (
@@ -500,7 +591,7 @@ export default function AppointmentsScreen() {
             {formatDisplayDate(selectedDate + 'T00:00:00')}
           </Text>
 
-          {selectedAppointments.length === 0 ? (
+          {selectedAppointments.length === 0 && selectedGoogleEvents.length === 0 ? (
             <View style={styles.emptyState}>
               <Ionicons name="calendar-outline" size={40} color={theme.colors.text.light} />
               <Text style={styles.emptyTitle}>No appointments</Text>
@@ -509,19 +600,24 @@ export default function AppointmentsScreen() {
               </TouchableOpacity>
             </View>
           ) : (
-            selectedAppointments.map(apt => (
-              <AppointmentCard
-                key={apt.id}
-                appointment={apt}
-                onEdit={() => handleEdit(apt)}
-                onDelete={() => handleDelete(apt)}
-              />
-            ))
+            <>
+              {selectedAppointments.map(apt => (
+                <AppointmentCard
+                  key={apt.id}
+                  appointment={apt}
+                  onEdit={() => handleEdit(apt)}
+                  onDelete={() => handleDelete(apt)}
+                />
+              ))}
+              {selectedGoogleEvents.map(evt => (
+                <GoogleEventCard key={evt.id} event={evt} />
+              ))}
+            </>
           )}
         </View>
 
         {/* ── Upcoming ─────────────────────────────────── */}
-        {upcomingAppointments.length > 0 && (
+        {(upcomingAppointments.length > 0 || upcomingGoogleEvents.length > 0) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Upcoming</Text>
             {upcomingAppointments.map(apt => (
@@ -532,6 +628,9 @@ export default function AppointmentsScreen() {
                 onDelete={() => handleDelete(apt)}
                 showDate
               />
+            ))}
+            {upcomingGoogleEvents.map(evt => (
+              <GoogleEventCard key={evt.id} event={evt} showDate />
             ))}
           </View>
         )}
@@ -580,6 +679,48 @@ export default function AppointmentsScreen() {
                 textDayHeaderFontSize: theme.fontSize.xs,
               }}
             />
+          </View>
+        </View>
+
+        {/* ── Connected Calendars ───────────────────────── */}
+        <View style={styles.section}>
+          <View style={styles.connectedCard}>
+            <View style={styles.connectedCardHeader}>
+              <Ionicons name="calendar-outline" size={16} color={theme.colors.primary} />
+              <Text style={styles.connectedCardTitle}>Connected Calendars</Text>
+            </View>
+
+            {!calendarConnection?.connected ? (
+              <View style={styles.connectPrompt}>
+                <View style={styles.googleIcon}>
+                  <Text style={styles.googleIconText}>G</Text>
+                </View>
+                <Text style={styles.connectPromptText}>No calendars connected yet</Text>
+                <TouchableOpacity style={styles.connectButton} onPress={handleConnectGoogle}>
+                  <Text style={styles.connectButtonText}>Connect Google Calendar</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.connectedRow}>
+                <View style={styles.connectedDot} />
+                <View style={styles.connectedInfo}>
+                  <Text style={styles.connectedName}>Google Calendar</Text>
+                  <Text style={styles.connectedEmail}>{calendarConnection.email}</Text>
+                </View>
+                <View style={styles.syncedBadge}>
+                  <Text style={styles.syncedBadgeText}>
+                    {calendarConnection.syncedEvents} synced
+                  </Text>
+                </View>
+                <TouchableOpacity style={styles.disconnectButton} onPress={handleDisconnect}>
+                  <Text style={styles.disconnectButtonText}>Disconnect</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <Text style={styles.connectedFooter}>
+              Outlook, Yahoo, and Apple Calendar coming soon.
+            </Text>
           </View>
         </View>
 
@@ -644,6 +785,45 @@ function AppointmentCard({ appointment, onEdit, onDelete, showDate }: Appointmen
         <TouchableOpacity onPress={onDelete} style={styles.actionButton}>
           <Ionicons name="trash-outline" size={16} color={theme.colors.error} />
         </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+// ─── Google Event Card ────────────────────────────────────
+interface GoogleEventCardProps {
+  event: GoogleEvent;
+  showDate?: boolean;
+}
+
+function GoogleEventCard({ event, showDate }: GoogleEventCardProps) {
+  const color = event.color || '#4285F4';
+  const dateStr = new Date(event.start).toISOString().split('T')[0];
+  const timeLabel = event.allDay
+    ? 'All day'
+    : new Date(event.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+  return (
+    <View style={styles.appointmentCard}>
+      <View style={[styles.colorBar, { backgroundColor: color }]} />
+      <View style={[styles.iconContainer, { backgroundColor: `${color}20` }]}>
+        <Text style={[styles.googleBadge, { color }]}>G</Text>
+      </View>
+      <View style={styles.aptInfo}>
+        <Text style={styles.aptTitle}>{event.title}</Text>
+        <View style={styles.aptMeta}>
+          <Ionicons name="time-outline" size={12} color={theme.colors.text.light} />
+          <Text style={styles.aptTime}>{timeLabel}</Text>
+          {showDate && (
+            <>
+              <Text style={styles.aptMetaDot}>·</Text>
+              <Text style={styles.aptDate}>{formatShortDate(dateStr)}</Text>
+            </>
+          )}
+          <View style={[styles.typeBadge, { backgroundColor: `${color}15` }]}>
+            <Text style={[styles.typeBadgeText, { color }]}>Google</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -850,6 +1030,122 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     padding: theme.spacing.xs,
+  },
+
+  // Google badge
+  googleBadge: {
+    fontSize: theme.fontSize.md,
+    fontWeight: theme.fontWeight.bold,
+  },
+
+  // Connected Calendars card
+  connectedCard: {
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  connectedCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    marginBottom: theme.spacing.md,
+  },
+  connectedCardTitle: {
+    fontSize: theme.fontSize.sm,
+    fontWeight: theme.fontWeight.semibold,
+    color: theme.colors.text.primary,
+  },
+  connectPrompt: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.lg,
+    gap: theme.spacing.sm,
+  },
+  googleIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: theme.borderRadius.full,
+    backgroundColor: '#4285F4',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  googleIconText: {
+    color: theme.colors.white,
+    fontSize: theme.fontSize.xl,
+    fontWeight: theme.fontWeight.bold,
+  },
+  connectPromptText: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.text.secondary,
+  },
+  connectButton: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.full,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
+  },
+  connectButtonText: {
+    color: theme.colors.white,
+    fontSize: theme.fontSize.sm,
+    fontWeight: theme.fontWeight.semibold,
+  },
+  connectedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+  },
+  connectedDot: {
+    width: 10,
+    height: 10,
+    borderRadius: theme.borderRadius.full,
+    backgroundColor: '#4285F4',
+    flexShrink: 0,
+  },
+  connectedInfo: {
+    flex: 1,
+  },
+  connectedName: {
+    fontSize: theme.fontSize.sm,
+    fontWeight: theme.fontWeight.medium,
+    color: theme.colors.text.primary,
+  },
+  connectedEmail: {
+    fontSize: theme.fontSize.xs,
+    color: theme.colors.text.secondary,
+  },
+  syncedBadge: {
+    backgroundColor: theme.colors.secondaryLight,
+    borderRadius: theme.borderRadius.full,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+  },
+  syncedBadgeText: {
+    fontSize: 10,
+    color: theme.colors.text.secondary,
+    fontWeight: theme.fontWeight.medium,
+  },
+  disconnectButton: {
+    borderWidth: 1,
+    borderColor: theme.colors.error,
+    borderRadius: theme.borderRadius.full,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+  },
+  disconnectButtonText: {
+    fontSize: theme.fontSize.xs,
+    color: theme.colors.error,
+    fontWeight: theme.fontWeight.medium,
+  },
+  connectedFooter: {
+    fontSize: 11,
+    color: theme.colors.text.light,
+    marginTop: theme.spacing.sm,
   },
 });
 

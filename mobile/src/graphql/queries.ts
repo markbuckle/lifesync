@@ -63,6 +63,28 @@ export const GET_APPOINTMENTS = gql`
   }
 `;
 
+export const GET_CALENDAR_CONNECTION = gql`
+  query GetCalendarConnection {
+    calendarConnection {
+      connected
+      email
+      syncedEvents
+    }
+  }
+`;
+
+export const GET_GOOGLE_CALENDAR_EVENTS = gql`
+  query GetGoogleCalendarEvents {
+    googleCalendarEvents {
+      id
+      title
+      start
+      allDay
+      color
+    }
+  }
+`;
+
 export const GET_ME = gql`
   query GetMe {
     me {

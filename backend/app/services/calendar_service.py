@@ -6,25 +6,26 @@ from app.core.config import settings
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 
-def _create_flow() -> Flow:
+def _create_flow(redirect_uri: str | None = None) -> Flow:
+    uri = redirect_uri or settings.GOOGLE_REDIRECT_URI
     client_config = {
         "web": {
             "client_id": settings.GOOGLE_CLIENT_ID,
             "client_secret": settings.GOOGLE_CLIENT_SECRET,
             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
             "token_uri": "https://oauth2.googleapis.com/token",
-            "redirect_uris": [settings.GOOGLE_REDIRECT_URI],
+            "redirect_uris": [uri],
         }
     }
     return Flow.from_client_config(
         client_config,
         scopes=SCOPES,
-        redirect_uri=settings.GOOGLE_REDIRECT_URI,
+        redirect_uri=uri,
     )
 
 
-def get_authorization_url(state: str) -> str:
-    flow = _create_flow()
+def get_authorization_url(state: str, redirect_uri: str | None = None) -> str:
+    flow = _create_flow(redirect_uri)
     auth_url, _ = flow.authorization_url(
         access_type='offline',
         include_granted_scopes='true',
@@ -34,8 +35,8 @@ def get_authorization_url(state: str) -> str:
     return auth_url
 
 
-def exchange_code(code: str) -> dict:
-    flow = _create_flow()
+def exchange_code(code: str, redirect_uri: str | None = None) -> dict:
+    flow = _create_flow(redirect_uri)
     flow.fetch_token(code=code)
     creds = flow.credentials
     return {

@@ -98,3 +98,12 @@ export const DELETE_APPOINTMENT_MUTATION = gql`
     }
   }
 `;
+
+export const DISCONNECT_CALENDAR_MUTATION = gql`
+  mutation DisconnectCalendar {
+    disconnectCalendar {
+      success
+      message
+    }
+  }
+`;
