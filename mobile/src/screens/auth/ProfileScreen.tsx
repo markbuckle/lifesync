@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  StatusBar,
 } from 'react-native';
 import { useQuery } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
@@ -121,6 +122,7 @@ export default function ProfileScreen() {
   if (loading) {
     return (
       <View style={styles.centered}>
+        <StatusBar barStyle="dark-content" />
         <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
@@ -132,11 +134,13 @@ export default function ProfileScreen() {
     : '??';
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
+    <>
+      <StatusBar barStyle="dark-content" />
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
       {/* ── Header ──────────────────────────────────────── */}
       <LinearGradient
         colors={[theme.colors.primaryDark, theme.colors.primary]}
@@ -266,7 +270,8 @@ export default function ProfileScreen() {
       </Section>
 
       <View style={{ height: theme.spacing.xl }} />
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }
 

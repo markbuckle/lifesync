@@ -12,6 +12,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { useQuery, useMutation } from '@apollo/client/react';
@@ -495,6 +496,7 @@ export default function AppointmentsScreen() {
   if (loading) {
     return (
       <View style={styles.centered}>
+        <StatusBar barStyle="dark-content" />
         <ActivityIndicator size="large" color={theme.colors.primary} />
         <Text style={styles.loadingText}>Loading appointments...</Text>
       </View>
@@ -505,6 +507,7 @@ export default function AppointmentsScreen() {
   if (error) {
     return (
       <View style={styles.centered}>
+        <StatusBar barStyle="dark-content" />
         <Ionicons name="alert-circle-outline" size={48} color={theme.colors.error} />
         <Text style={styles.errorText}>Failed to load appointments</Text>
         <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
@@ -554,6 +557,7 @@ export default function AppointmentsScreen() {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <ScrollView
         contentContainerStyle={[styles.content, { paddingTop: insets.top + theme.spacing.md }]}
         showsVerticalScrollIndicator={false}

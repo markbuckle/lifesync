@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
 import { useQuery } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
@@ -116,6 +117,7 @@ export default function DashboardScreen() {
   if (loading) {
     return (
       <View style={styles.centered}>
+        <StatusBar barStyle="dark-content" />
         <ActivityIndicator size="large" color={theme.colors.primary} />
         <Text style={styles.loadingText}>Loading your dashboard...</Text>
       </View>
@@ -126,6 +128,7 @@ export default function DashboardScreen() {
   if (error) {
     return (
       <View style={styles.centered}>
+        <StatusBar barStyle="dark-content" />
         <Ionicons name="alert-circle-outline" size={48} color={theme.colors.error} />
         <Text style={styles.errorText}>Failed to load dashboard</Text>
         <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
@@ -162,18 +165,20 @@ export default function DashboardScreen() {
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={[styles.content, { paddingTop: insets.top + theme.spacing.md }]}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          tintColor={theme.colors.primary}
-        />
-      }
-    >
+    <>
+      <StatusBar barStyle="dark-content" />
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={[styles.content, { paddingTop: insets.top + theme.spacing.md }]}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.colors.primary}
+          />
+        }
+      >
       {/* ── Header ────────────────────────────────────── */}
       <View style={styles.header}>
         <View>
@@ -321,6 +326,7 @@ export default function DashboardScreen() {
       {/* Bottom padding */}
       <View style={{ height: theme.spacing.xl }} />
     </ScrollView>
+    </>
   );
 }
 

@@ -10,6 +10,7 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
+  StatusBar,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -293,6 +294,7 @@ export default function AIAssistantScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={0}
     >
+      <StatusBar barStyle="light-content" />
       {/* ── Header ──────────────────────────────────────── */}
       <LinearGradient
         colors={[theme.colors.primaryDark, theme.colors.primary]}
