@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import {
   LayoutDashboard,
   CalendarCheck,
-  CheckSquare,
-  FolderKanban,
-  Sparkles,
   CalendarDays,
+  CalendarClock,
+  Sparkles,
 } from 'lucide-react';
+
 
 function useScrollReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -67,7 +67,7 @@ const HomePage: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            AI-Powered Productivity
+            AI-Powered Scheduling
           </div>
 
           {/* Headline */}
@@ -78,7 +78,7 @@ const HomePage: React.FC = () => {
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed">
-            LifeSync uses AI to unify your tasks, calendar, and projects - so you spend less time organizing and more time doing what matters.
+            LifeSync uses AI to manage your calendar and appointments - so you spend less time scheduling and more time doing what matters.
           </p>
 
           {/* CTA Buttons */}
@@ -121,8 +121,8 @@ const HomePage: React.FC = () => {
       <section className="py-16 md:py-24 bg-background">
         <div ref={features.ref} className={`max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 ${revealClass(features.visible)}`}>
           <div className="text-center mb-16">
-            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Everything you need</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Built for how you actually work</h2>
+            <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Built for your schedule</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Your time, under control</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -130,32 +130,27 @@ const HomePage: React.FC = () => {
               {
                 icon: LayoutDashboard,
                 title: 'Smart Dashboard',
-                description: 'Get a unified view of your day - upcoming events, pending tasks, and project status at a glance.',
+                description: 'Get a clear view of your day at a glance — upcoming appointments, weekly schedule, and what\'s coming up next.',
               },
               {
                 icon: CalendarCheck,
                 title: 'Appointment Booking',
-                description: 'Let others book time with you through shareable scheduling links that respect your availability.',
-              },
-              {
-                icon: CheckSquare,
-                title: 'Task Management',
-                description: 'Create, prioritize, and track tasks with due dates and statuses so nothing slips through the cracks.',
-              },
-              {
-                icon: FolderKanban,
-                title: 'Project Tracker',
-                description: 'Organize work into projects with milestones and task breakdowns to keep larger goals on track.',
-              },
-              {
-                icon: Sparkles,
-                title: 'AI Assistant',
-                description: 'Ask questions, get summaries, or let the AI suggest how to structure your day based on your workload.',
+                description: 'Create and manage appointments with ease. Set types, times, and colors to keep your schedule organized.',
               },
               {
                 icon: CalendarDays,
                 title: 'Calendar Integration',
-                description: 'See all your events in one calendar that syncs with your tasks and project deadlines automatically.',
+                description: 'Connect your Google Calendar and see all your events in one place, synced in real time.',
+              },
+              {
+                icon: CalendarClock,
+                title: 'Schedule Management',
+                description: 'View your week at a glance, spot conflicts early, and stay on top of everything coming up.',
+              },
+              {
+                icon: Sparkles,
+                title: 'AI Assistant',
+                description: 'Ask about your schedule, get a summary of your week, or let the AI help you plan your day.',
               },
             ].map(({ icon: Icon, title, description }) => (
               <div
@@ -192,8 +187,8 @@ const HomePage: React.FC = () => {
               },
               {
                 step: 2,
-                title: 'Add your tasks & projects',
-                description: 'Create tasks, set deadlines, and group them into projects. Everything lives in one place.',
+                title: 'Add your appointments',
+                description: 'Create appointments, set reminders, and connect your existing calendar. Everything lives in one place.',
               },
               {
                 step: 3,

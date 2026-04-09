@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LayoutDashboard,
-  CheckSquare,
+  CalendarCheck,
   CalendarDays,
-  FolderKanban,
+  CalendarClock,
   Sparkles,
   Mail,
   MessageSquare,
@@ -48,9 +48,9 @@ const DashboardPreview = () => (
   <div className="space-y-4">
     <div className="flex gap-4">
       {[
-        { label: "Today's Tasks", value: '8' },
-        { label: 'This Week', value: '23' },
-        { label: 'Projects', value: '4' },
+        { label: "Today's Appointments", value: '3' },
+        { label: 'This Week', value: '11' },
+        { label: 'Coming Up', value: '6' },
       ].map(({ label, value }) => (
         <div key={label} className="flex-1 bg-background rounded-xl p-4">
           <p className="text-2xl font-bold text-primary">{value}</p>
@@ -61,34 +61,42 @@ const DashboardPreview = () => (
     <div className="bg-primary/10 rounded-xl p-4 flex items-center gap-3">
       <Sparkles className="w-5 h-5 text-primary flex-shrink-0" />
       <p className="text-sm text-gray-700">
-        AI insight: You have 3 high-priority tasks due today. Consider blocking 2 hours this afternoon.
+        AI insight: You have a busy morning with 2 back-to-back appointments. Your afternoon is free.
       </p>
     </div>
-    <div className="bg-background rounded-xl p-4 space-y-2">
-      {['Review design mockups', 'Send weekly update', 'Schedule team sync'].map((task) => (
-        <div key={task} className="flex items-center gap-3">
-          <div className="w-4 h-4 rounded border-2 border-gray-300 flex-shrink-0" />
-          <span className="text-sm text-gray-700">{task}</span>
+    <div className="bg-background rounded-xl p-4 space-y-2.5">
+      {[
+        { title: 'Team Standup', time: '10:00 AM', color: '#B85C38' },
+        { title: 'Client Call', time: '2:00 PM', color: '#4285F4' },
+        { title: 'Dentist', time: '4:30 PM', color: '#10B981' },
+      ].map(({ title, time, color }) => (
+        <div key={title} className="flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+          <span className="text-sm text-gray-400 tabular-nums">{time}</span>
+          <span className="text-sm text-gray-700">{title}</span>
         </div>
       ))}
     </div>
   </div>
 );
 
-const TasksPreview = () => {
-  const tasks = [
-    { title: 'Finalize Q2 report', badge: 'High', badgeClass: 'bg-red-100 text-red-600' },
-    { title: 'Review design mockups', badge: 'Medium', badgeClass: 'bg-yellow-100 text-yellow-600' },
-    { title: 'Send client proposal', badge: 'High', badgeClass: 'bg-red-100 text-red-600' },
-    { title: 'Update team documentation', badge: 'Low', badgeClass: 'bg-green-100 text-green-600' },
+const AppointmentsPreview = () => {
+  const appointments = [
+    { title: 'Team Standup', time: 'Mon, 10:00 AM', badge: 'Meeting', badgeClass: 'bg-blue-100 text-blue-600' },
+    { title: 'Dentist Appointment', time: 'Tue, 9:00 AM', badge: 'Doctor', badgeClass: 'bg-green-100 text-green-600' },
+    { title: 'Client Check-in', time: 'Wed, 2:00 PM', badge: 'Work', badgeClass: 'bg-orange-100 text-orange-600' },
+    { title: 'Gym Session', time: 'Thu, 7:00 AM', badge: 'Personal', badgeClass: 'bg-purple-100 text-purple-600' },
   ];
   return (
     <div className="space-y-3">
-      {tasks.map(({ title, badge, badgeClass }) => (
+      {appointments.map(({ title, time, badge, badgeClass }) => (
         <div key={title} className="flex items-center gap-3 bg-background rounded-xl px-4 py-3">
-          <div className="w-4 h-4 rounded border-2 border-gray-300 flex-shrink-0" />
-          <span className="flex-1 text-sm text-gray-700">{title}</span>
-          <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${badgeClass}`}>{badge}</span>
+          <CalendarCheck className="w-4 h-4 text-primary flex-shrink-0" strokeWidth={1.75} />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm text-gray-700 font-medium">{title}</p>
+            <p className="text-xs text-gray-400">{time}</p>
+          </div>
+          <span className={`text-xs font-medium px-2.5 py-1 rounded-full flex-shrink-0 ${badgeClass}`}>{badge}</span>
         </div>
       ))}
     </div>
@@ -142,26 +150,31 @@ const CalendarPreview = () => {
   );
 };
 
-const ProjectsPreview = () => {
-  const projects = [
-    { name: 'Website Redesign', progress: 65, tasks: '13/20 tasks', status: 'On Track', statusClass: 'bg-green-100 text-green-700' },
-    { name: 'Mobile App MVP', progress: 40, tasks: '8/20 tasks', status: 'In Progress', statusClass: 'bg-blue-100 text-blue-700' },
-    { name: 'Q2 Marketing Push', progress: 85, tasks: '17/20 tasks', status: 'Nearly Done', statusClass: 'bg-yellow-100 text-yellow-700' },
+const SchedulePreview = () => {
+  const days = [
+    { day: 'Mon', events: [{ title: 'Team Standup', color: '#B85C38' }] },
+    { day: 'Tue', events: [{ title: 'Dentist', color: '#10B981' }, { title: 'Lunch w/ Sarah', color: '#4285F4' }] },
+    { day: 'Wed', events: [] },
+    { day: 'Thu', events: [{ title: 'Client Call', color: '#F59E0B' }] },
+    { day: 'Fri', events: [{ title: 'Project Review', color: '#B85C38' }, { title: 'Team Lunch', color: '#8B5CF6' }] },
   ];
   return (
-    <div className="space-y-5">
-      {projects.map(({ name, progress, tasks, status, statusClass }) => (
-        <div key={name} className="bg-background rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-medium text-gray-900 text-sm">{name}</span>
-            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusClass}`}>{status}</span>
-          </div>
-          <div className="bg-gray-200 rounded-full h-2 mb-2">
-            <div className="bg-primary rounded-full h-2" style={{ width: `${progress}%` }} />
-          </div>
-          <div className="flex justify-between text-xs text-gray-500">
-            <span>{tasks}</span>
-            <span>{progress}%</span>
+    <div className="bg-background rounded-xl p-4 space-y-2">
+      {days.map(({ day, events }) => (
+        <div key={day} className="flex items-start gap-4">
+          <span className="text-xs font-medium text-gray-400 w-8 pt-1 flex-shrink-0">{day}</span>
+          <div className="flex-1 flex flex-wrap gap-2 min-h-[28px]">
+            {events.length > 0 ? events.map(({ title, color }) => (
+              <span
+                key={title}
+                className="text-xs text-white px-2.5 py-1 rounded-full font-medium"
+                style={{ backgroundColor: color }}
+              >
+                {title}
+              </span>
+            )) : (
+              <span className="text-xs text-gray-300 pt-1">Free</span>
+            )}
           </div>
         </div>
       ))}
@@ -172,16 +185,16 @@ const ProjectsPreview = () => {
 const AIPreview = () => (
   <div className="flex flex-col space-y-3 max-w-sm mx-auto">
     <div className="bg-primary text-white rounded-2xl rounded-br-sm px-4 py-2 ml-auto max-w-xs text-sm">
-      What&apos;s on my plate today?
+      What does my week look like?
     </div>
     <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-bl-sm px-4 py-2 max-w-xs text-sm">
-      You have 8 tasks today: 3 high-priority, 2 meetings, and a project deadline at 5 PM.
+      You have 11 appointments this week. Tuesday is your busiest day with 3 back-to-back events starting at 9 AM.
     </div>
     <div className="bg-primary text-white rounded-2xl rounded-br-sm px-4 py-2 ml-auto max-w-xs text-sm">
-      Block time for deep work this afternoon
+      Do I have anything on Friday afternoon?
     </div>
     <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-bl-sm px-4 py-2 max-w-xs text-sm">
-      Done! I&apos;ve blocked 2–4 PM as focus time and moved your optional meeting to tomorrow.
+      You have a Team Lunch at 12:30 PM, then you&apos;re free from 2 PM onwards.
     </div>
   </div>
 );
@@ -191,35 +204,35 @@ const tabs = [
     id: 'dashboard',
     label: 'Dashboard',
     icon: LayoutDashboard,
-    description: "Get a bird's-eye view of your day. See upcoming appointments, urgent tasks, and project health all in one glance.",
+    description: "Get a clear view of your day at a glance — today's appointments, your weekly schedule, and what's coming up next.",
     preview: <DashboardPreview />,
   },
   {
-    id: 'tasks',
-    label: 'Tasks',
-    icon: CheckSquare,
-    description: 'Create, prioritize, and track tasks with due dates, categories, and AI-assisted scheduling.',
-    preview: <TasksPreview />,
+    id: 'appointments',
+    label: 'Appointments',
+    icon: CalendarCheck,
+    description: 'Create and manage appointments with types, times, and colors. Everything you have scheduled, in one clean list.',
+    preview: <AppointmentsPreview />,
   },
   {
     id: 'calendar',
     label: 'Calendar',
     icon: CalendarDays,
-    description: 'View all your events in a clean calendar that syncs with your tasks and project deadlines automatically.',
+    description: 'View all your events in a clean calendar. Connect Google Calendar and see everything synced in real time.',
     preview: <CalendarPreview />,
   },
   {
-    id: 'projects',
-    label: 'Projects',
-    icon: FolderKanban,
-    description: 'Track projects with milestones, progress bars, and at-a-glance status so nothing slips.',
-    preview: <ProjectsPreview />,
+    id: 'schedule',
+    label: 'Schedule',
+    icon: CalendarClock,
+    description: 'See your full week at a glance, spot conflicts early, and stay on top of everything coming up.',
+    preview: <SchedulePreview />,
   },
   {
     id: 'ai',
     label: 'AI Assistant',
     icon: Sparkles,
-    description: 'Ask questions in plain English. Your AI assistant can create tasks, summarize your week, and surface what needs attention.',
+    description: 'Ask about your schedule in plain English. Get a summary of your week, check your availability, or plan your day.',
     preview: <AIPreview />,
   },
 ];
@@ -324,7 +337,7 @@ const FeaturesPage: React.FC = () => {
             <span className="text-primary-light">one platform</span>
           </h1>
           <p className="text-white/70 text-lg max-w-xl mx-auto mt-6 leading-relaxed">
-            LifeSync brings your tasks, calendar, projects and AI assistant into one beautifully unified experience.
+            LifeSync brings your calendar, appointments, and AI assistant into one beautifully unified experience.
           </p>
           {/* <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
             <Link

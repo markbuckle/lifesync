@@ -62,7 +62,12 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-background">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+      <div className="w-full max-w-md">
+        <Link to="/" className="flex items-center justify-center gap-2 mb-6">
+          <img src="/logo.svg" alt="LifeSync Logo" className="w-auto h-7" />
+          <span className="font-bold text-2xl font-architects text-gray-900">LifeSync</span>
+        </Link>
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full">
         <h1 className="text-3xl font-bold text-center mb-8 text-primary">Welcome back</h1>
 
         {error && (
@@ -125,6 +130,7 @@ const LoginPage: React.FC = () => {
             Sign up
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );

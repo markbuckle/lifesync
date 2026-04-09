@@ -112,7 +112,12 @@ const SignupPage: React.FC = () => {
 
   return (
     <div className="bg-background py-6 px-4">
-      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md mx-auto mt-14">
+      <div className="w-full max-w-md mx-auto mt-14">
+        <Link to="/" className="flex items-center justify-center gap-2 mb-6">
+          <img src="/logo.svg" alt="LifeSync Logo" className="w-auto h-7" />
+          <span className="font-bold text-2xl font-architects text-gray-900">LifeSync</span>
+        </Link>
+      <div className="bg-white p-6 rounded-xl shadow-lg w-full">
         <h1 className="text-2xl font-bold text-center text-primary">
           Create your account
         </h1>
@@ -250,6 +255,7 @@ const SignupPage: React.FC = () => {
             Sign in
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );
