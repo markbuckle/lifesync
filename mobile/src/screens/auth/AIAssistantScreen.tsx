@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
 
 // ─── Types ───────────────────────────────────────────────
@@ -119,6 +120,7 @@ const getAIResponse = (userMessage: string): string => {
 
 // ─── Main Screen ──────────────────────────────────────────
 export default function AIAssistantScreen() {
+  const insets = useSafeAreaInsets();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
@@ -296,7 +298,7 @@ export default function AIAssistantScreen() {
         colors={[theme.colors.primaryDark, theme.colors.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={styles.header}
+        style={[styles.header, { paddingTop: insets.top + theme.spacing.md }]}
       >
         <TouchableOpacity
           style={styles.headerButton}
@@ -328,7 +330,7 @@ export default function AIAssistantScreen() {
 
       {/* ── Sidebar Overlay ──────────────────────────────── */}
       {showSidebar && (
-        <View style={styles.sidebar}>
+        <View style={[styles.sidebar, { top: insets.top + 54 }]}>
           <Text style={styles.sidebarTitle}>Conversations</Text>
           <ScrollView showsVerticalScrollIndicator={false}>
             {conversations.length === 0 ? (
@@ -407,7 +409,7 @@ export default function AIAssistantScreen() {
       )}
 
       {/* ── Input Bar ────────────────────────────────────── */}
-      <View style={styles.inputBar}>
+      <View style={[styles.inputBar, { paddingBottom: Math.max(insets.bottom + theme.spacing.sm, theme.spacing.lg) }]}>
         <TextInput
           style={styles.input}
           placeholder="Ask me anything..."
@@ -448,7 +450,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 56,
     paddingBottom: theme.spacing.md,
     paddingHorizontal: theme.spacing.md,
   },
@@ -473,7 +474,6 @@ const styles = StyleSheet.create({
   // Sidebar
   sidebar: {
     position: 'absolute',
-    top: 110,
     left: 0,
     bottom: 0,
     width: '75%',
@@ -592,7 +592,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: theme.spacing.sm,
     padding: theme.spacing.md,
-    paddingBottom: theme.spacing.lg,
     backgroundColor: theme.colors.white,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,

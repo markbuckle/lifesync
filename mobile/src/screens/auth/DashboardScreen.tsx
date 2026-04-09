@@ -14,6 +14,7 @@ import { useAuth } from '../../context/AuthContext';
 import { GET_DASHBOARD_DATA } from '../../graphql/queries';
 import { theme } from '../../theme';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // ─── Types ───────────────────────────────────────────────
 interface DashboardData {
@@ -103,6 +104,7 @@ export default function DashboardScreen() {
   const { logout } = useAuth();
   const { data, loading, error, refetch } = useQuery<DashboardData>(GET_DASHBOARD_DATA);
   const [refreshing, setRefreshing] = React.useState(false);
+  const insets = useSafeAreaInsets();
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -162,7 +164,7 @@ export default function DashboardScreen() {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingTop: insets.top + theme.spacing.md }]}
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
@@ -330,7 +332,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: theme.spacing.lg,
-    paddingTop: 60,
     paddingBottom: theme.spacing.xl,
   },
   centered: {

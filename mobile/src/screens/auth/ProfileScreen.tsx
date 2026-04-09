@@ -11,6 +11,7 @@ import {
 import { useQuery } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../../context/AuthContext';
 import { GET_ME } from '../../graphql/queries';
 import { theme } from '../../theme';
@@ -102,6 +103,7 @@ function Row({
 
 // ─── Main Screen ──────────────────────────────────────────
 export default function ProfileScreen() {
+  const insets = useSafeAreaInsets();
   const { logout } = useAuth();
   const { data, loading, error } = useQuery<MeData>(GET_ME);
 
@@ -140,7 +142,7 @@ export default function ProfileScreen() {
         colors={[theme.colors.primaryDark, theme.colors.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.header}
+        style={[styles.header, { paddingTop: insets.top + theme.spacing.lg }]}
       >
         <View style={styles.avatarContainer}>
           <Text style={styles.avatarText}>{initials}</Text>
@@ -287,7 +289,6 @@ const styles = StyleSheet.create({
   // Header
   header: {
     alignItems: 'center',
-    paddingTop: 70,
     paddingBottom: theme.spacing.xl,
     paddingHorizontal: theme.spacing.lg,
   },

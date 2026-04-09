@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AuthStackParamList } from '../../navigation';
 import { theme } from '../../theme';
 import { useMutation } from '@apollo/client/react';
@@ -37,6 +38,7 @@ interface Props {
 }
 
 export default function LoginScreen({ navigation }: Props) {
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -82,7 +84,7 @@ const handleLogin = async () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: Math.max(insets.top + theme.spacing.md, theme.spacing.xxl) }]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -191,7 +193,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.xxl,
+    paddingBottom: theme.spacing.xxl,
   },
 
   // Header

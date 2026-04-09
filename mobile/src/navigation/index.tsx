@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAuth } from '../context/AuthContext';
 import { ActivityIndicator, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../theme';
 import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -47,6 +48,7 @@ function AuthNavigator() {
 
 // ─── Main Tab Bar ─────────────────────────────────────────
 function MainNavigator() {
+  const insets = useSafeAreaInsets();
   return (
     <MainTab.Navigator
       screenOptions={({ route }) => ({
@@ -56,9 +58,9 @@ function MainNavigator() {
         tabBarStyle: {
           backgroundColor: theme.colors.white,
           borderTopColor: theme.colors.border,
-          paddingBottom: 24,
+          paddingBottom: Math.max(insets.bottom, theme.spacing.lg),
           paddingTop: 8,
-          height: 80,
+          height: 80 + Math.max(insets.bottom - theme.spacing.lg, 0),
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';

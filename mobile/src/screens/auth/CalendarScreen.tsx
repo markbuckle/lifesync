@@ -31,6 +31,7 @@ import {
   DELETE_APPOINTMENT_MUTATION,
   DISCONNECT_CALENDAR_MUTATION,
 } from '../../graphql/mutations';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
 
 const API_BASE_URL = (Constants.expoConfig?.extra?.apiBaseUrl as string) ?? 'http://localhost:8000';
@@ -360,6 +361,7 @@ function AppointmentModal({
 
 // ─── Main Screen ──────────────────────────────────────────
 export default function AppointmentsScreen() {
+  const insets = useSafeAreaInsets();
   const today = new Date().toISOString().split('T')[0];
   const [selectedDate, setSelectedDate] = useState(today);
   const [modalVisible, setModalVisible] = useState(false);
@@ -553,7 +555,7 @@ export default function AppointmentsScreen() {
   return (
     <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingTop: insets.top + theme.spacing.md }]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -836,7 +838,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   content: {
-    paddingTop: 60,
     paddingBottom: theme.spacing.xl,
   },
   centered: {
