@@ -106,7 +106,7 @@ function Row({
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { logout } = useAuth();
-  const { data, loading, error } = useQuery<MeData>(GET_ME);
+  const { data, loading } = useQuery<MeData>(GET_ME);
 
   const handleLogout = () => {
     Alert.alert(

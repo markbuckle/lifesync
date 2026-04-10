@@ -78,24 +78,6 @@ const getPriorityColor = (priority: string) => {
   }
 };
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case 'on-track': return '#10B981';
-    case 'at-risk': return '#F59E0B';
-    case 'delayed': return '#EF4444';
-    default: return theme.colors.text.light;
-  }
-};
-
-const getStatusLabel = (status: string) => {
-  switch (status) {
-    case 'on-track': return 'On Track';
-    case 'at-risk': return 'At Risk';
-    case 'delayed': return 'Delayed';
-    default: return status;
-  }
-};
-
 const isToday = (dateStr: string) => {
   const date = new Date(dateStr);
   const today = new Date();

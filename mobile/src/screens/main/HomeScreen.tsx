@@ -12,7 +12,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation';
 import { theme } from '../../theme';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
