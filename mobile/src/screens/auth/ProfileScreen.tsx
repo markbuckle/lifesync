@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
   StatusBar,
 } from 'react-native';
@@ -13,6 +12,7 @@ import { useQuery } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LoadingScreen from '../../components/LoadingScreen';
 import { useAuth } from '../../context/AuthContext';
 import { GET_ME } from '../../graphql/queries';
 import { theme } from '../../theme';
@@ -120,12 +120,7 @@ export default function ProfileScreen() {
   };
 
   if (loading) {
-    return (
-      <View style={styles.centered}>
-        <StatusBar barStyle="dark-content" />
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   const user = data?.me;
@@ -284,13 +279,6 @@ const styles = StyleSheet.create({
   content: {
     paddingBottom: theme.spacing.xl,
   },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: theme.colors.background,
-  },
-
   // Header
   header: {
     alignItems: 'center',

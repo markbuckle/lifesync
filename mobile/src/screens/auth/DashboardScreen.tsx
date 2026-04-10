@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
   StatusBar,
 } from 'react-native';
@@ -16,6 +15,9 @@ import { GET_DASHBOARD_DATA } from '../../graphql/queries';
 import { theme } from '../../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LoadingScreen from '../../components/LoadingScreen';
+import EmptyState from '../../components/EmptyState';
+import ScreenHeader from '../../components/ScreenHeader';
 
 // ─── Types ───────────────────────────────────────────────
 interface DashboardData {
@@ -115,13 +117,7 @@ export default function DashboardScreen() {
 
   // ── Loading ──────────────────────────────────────────
   if (loading) {
-    return (
-      <View style={styles.centered}>
-        <StatusBar barStyle="dark-content" />
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text style={styles.loadingText}>Loading your dashboard...</Text>
-      </View>
-    );
+    return <LoadingScreen message="Loading your dashboard..." />;
   }
 
   // ── Error ────────────────────────────────────────────
@@ -180,17 +176,12 @@ export default function DashboardScreen() {
         }
       >
       {/* ── Header ────────────────────────────────────── */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>
-            {getGreeting()}, {data?.me.firstName}
-          </Text>
-          <Text style={styles.date}>{formatDate()}</Text>
-        </View>
-        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-          <Ionicons name="log-out-outline" size={22} color={theme.colors.text.secondary} />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title={`${getGreeting()}, ${data?.me.firstName}`}
+        subtitle={formatDate()}
+        titleSize="xl"
+        rightAction={{ icon: 'log-out-outline', onPress: logout }}
+      />
 
       {/* ── Stats Row ─────────────────────────────────── */}
       <View style={styles.statsRow}>
@@ -216,10 +207,7 @@ export default function DashboardScreen() {
         </View>
 
         {todayAppointments.length === 0 ? (
-          <View style={styles.emptyCard}>
-            <Ionicons name="calendar-outline" size={32} color={theme.colors.text.light} />
-            <Text style={styles.emptyText}>No appointments today</Text>
-          </View>
+          <EmptyState icon="calendar-outline" title="No appointments today" />
         ) : (
           todayAppointments.map(apt => (
             <View key={apt.id} style={styles.appointmentCard}>
@@ -244,10 +232,7 @@ export default function DashboardScreen() {
         </View>
 
         {highPriorityTasks.length === 0 ? (
-          <View style={styles.emptyCard}>
-            <Ionicons name="checkmark-circle-outline" size={32} color={theme.colors.text.light} />
-            <Text style={styles.emptyText}>No high priority tasks 🎉</Text>
-          </View>
+          <EmptyState icon="checkmark-circle-outline" title="No high priority tasks" />
         ) : (
           highPriorityTasks.slice(0, 3).map(task => (
             <View key={task.id} style={styles.taskCard}>
@@ -347,11 +332,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     gap: theme.spacing.md,
   },
-  loadingText: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.text.secondary,
-    marginTop: theme.spacing.sm,
-  },
   errorText: {
     fontSize: theme.fontSize.md,
     color: theme.colors.error,
@@ -366,27 +346,6 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: theme.colors.white,
     fontWeight: theme.fontWeight.semibold,
-  },
-
-  // Header
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: theme.spacing.lg,
-  },
-  greeting: {
-    fontSize: theme.fontSize.xl,
-    fontWeight: theme.fontWeight.bold,
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.xs,
-  },
-  date: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.text.secondary,
-  },
-  logoutButton: {
-    padding: theme.spacing.xs,
   },
 
   // Stats
@@ -470,19 +429,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: theme.borderRadius.full,
     overflow: 'hidden',
-  },
-
-  // Empty state
-  emptyCard: {
-    backgroundColor: theme.colors.white,
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.xl,
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  emptyText: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.text.light,
   },
 
   // Appointments

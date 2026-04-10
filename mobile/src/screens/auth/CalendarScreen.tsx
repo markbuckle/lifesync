@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
   Modal,
   TextInput,
@@ -33,6 +32,9 @@ import {
   DISCONNECT_CALENDAR_MUTATION,
 } from '../../graphql/mutations';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LoadingScreen from '../../components/LoadingScreen';
+import EmptyState from '../../components/EmptyState';
+import ScreenHeader from '../../components/ScreenHeader';
 import { theme } from '../../theme';
 
 const API_BASE_URL = (Constants.expoConfig?.extra?.apiBaseUrl as string) ?? 'http://localhost:8000';
@@ -494,13 +496,7 @@ export default function AppointmentsScreen() {
 
   // ── Loading ──────────────────────────────────────────
   if (loading) {
-    return (
-      <View style={styles.centered}>
-        <StatusBar barStyle="dark-content" />
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text style={styles.loadingText}>Loading appointments...</Text>
-      </View>
-    );
+    return <LoadingScreen message="Loading appointments..." />;
   }
 
   // ── Error ────────────────────────────────────────────
@@ -570,17 +566,11 @@ export default function AppointmentsScreen() {
         }
       >
         {/* ── Header ──────────────────────────────────── */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>Calendar</Text>
-            <Text style={styles.subtitle}>
-              {allAppointments.length} total appointments
-            </Text>
-          </View>
-          <TouchableOpacity style={styles.addButton} onPress={handleNew}>
-            <Ionicons name="add" size={24} color={theme.colors.white} />
-          </TouchableOpacity>
-        </View>
+        <ScreenHeader
+          title="Calendar"
+          subtitle={`${allAppointments.length} total appointments`}
+          rightAction={{ icon: 'add', onPress: handleNew, primary: true }}
+        />
 
         {/* ── Calendar Strip ───────────────────────────── */}
         <View style={styles.stripContainer}>
@@ -598,13 +588,12 @@ export default function AppointmentsScreen() {
           </Text>
 
           {selectedAppointments.length === 0 && selectedGoogleEvents.length === 0 ? (
-            <View style={styles.emptyState}>
-              <Ionicons name="calendar-outline" size={40} color={theme.colors.text.light} />
-              <Text style={styles.emptyTitle}>No appointments</Text>
-              <TouchableOpacity onPress={handleNew}>
-                <Text style={styles.emptyAction}>+ Add one</Text>
-              </TouchableOpacity>
-            </View>
+            <EmptyState
+              icon="calendar-outline"
+              title="No appointments"
+              actionLabel="+ Add one"
+              onAction={handleNew}
+            />
           ) : (
             <>
               {selectedAppointments.map(apt => (
@@ -851,10 +840,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     gap: theme.spacing.md,
   },
-  loadingText: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.text.secondary,
-  },
   errorText: {
     fontSize: theme.fontSize.md,
     color: theme.colors.error,
@@ -869,38 +854,6 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: theme.colors.white,
     fontWeight: theme.fontWeight.semibold,
-  },
-
-  // Header
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.lg,
-    paddingHorizontal: theme.spacing.lg,
-  },
-  title: {
-    fontSize: theme.fontSize.xxl,
-    fontWeight: theme.fontWeight.bold,
-    color: theme.colors.text.primary,
-  },
-  subtitle: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.text.secondary,
-    marginTop: 2,
-  },
-  addButton: {
-    width: 44,
-    height: 44,
-    borderRadius: theme.borderRadius.full,
-    backgroundColor: theme.colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: theme.colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
   },
 
   // Calendar Strip
@@ -923,24 +876,6 @@ const styles = StyleSheet.create({
     fontWeight: theme.fontWeight.semibold,
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.sm,
-  },
-
-  // Empty state
-  emptyState: {
-    backgroundColor: theme.colors.white,
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.xl,
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  emptyTitle: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.text.light,
-  },
-  emptyAction: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.primary,
-    fontWeight: theme.fontWeight.semibold,
   },
 
   // Month Calendar
