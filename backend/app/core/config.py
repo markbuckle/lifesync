@@ -30,6 +30,17 @@ class Settings(BaseSettings):
     GOOGLE_CLOUD_PROJECT: Optional[str] = None
     FIRESTORE_COLLECTION: Optional[str] = "ai_conversations"
     
+    # Personal
+    MY_PHONE_NUMBER: Optional[str] = None
+    MY_EMAIL: Optional[str] = None
+
+    # Twilio SMS
+    TWILIO_ACCOUNT_SID: Optional[str] = None
+    TWILIO_AUTH_TOKEN: Optional[str] = None
+    TWILIO_PHONE_NUMBER: Optional[str] = None
+    RECOVERY_CODE: Optional[str] = None
+    MessagingServiceSid: Optional[str] = None
+
     class Config:
         env_file = ".env"
         case_sensitive = True

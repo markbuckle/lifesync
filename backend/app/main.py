@@ -14,6 +14,8 @@ from app.models.project import Project
 from app.models.password_reset import PasswordResetToken
 from app.graphql.schema import schema
 from app.graphql.context import get_context
+from app.api.sms import router as sms_router
+from app.models.sms_conversation import SMSConversation
 import base64
 import json
 from typing import Optional
@@ -46,7 +48,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL],
+    allow_origins=[settings.FRONTEND_URL, "*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -59,6 +61,7 @@ graphql_app = GraphQLRouter(
 )
 
 app.include_router(graphql_app, prefix="/graphql")
+app.include_router(sms_router)
 
 @app.get("/")
 def read_root():

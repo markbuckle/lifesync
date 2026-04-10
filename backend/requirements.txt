@@ -34,6 +34,9 @@ google-auth-oauthlib==1.2.0
 google-auth-httplib2==0.2.0
 google-api-python-client==2.116.0
 
+# Twilio
+twilio==9.10.4
+
 # Testing (optional for now)
 pytest==7.4.4
 httpx==0.26.0
