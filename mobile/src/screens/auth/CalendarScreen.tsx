@@ -290,13 +290,13 @@ function AppointmentModal({
 
           {/* Header */}
           <View style={modalStyles.header}>
-            <TouchableOpacity onPress={onClose}>
+            <TouchableOpacity onPress={onClose} activeOpacity={0.7}>
               <Text style={modalStyles.cancelText}>Cancel</Text>
             </TouchableOpacity>
             <Text style={modalStyles.headerTitle}>
               {editingAppointment ? 'Edit Appointment' : 'New Appointment'}
             </Text>
-            <TouchableOpacity onPress={handleSave}>
+            <TouchableOpacity onPress={handleSave} activeOpacity={0.7}>
               <Text style={modalStyles.saveText}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -346,6 +346,7 @@ function AppointmentModal({
                       },
                     ]}
                     onPress={() => setType(t)}
+                    activeOpacity={0.75}
                   >
                     <Ionicons
                       name={getTypeIcon(t)}
@@ -553,7 +554,7 @@ export default function AppointmentsScreen() {
         <StatusBar barStyle="dark-content" />
         <Ionicons name="alert-circle-outline" size={48} color={theme.colors.error} />
         <Text style={styles.errorText}>Failed to load appointments</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+        <TouchableOpacity style={styles.retryButton} onPress={() => refetch()} activeOpacity={0.85}>
           <Text style={styles.retryButtonText}>Try Again</Text>
         </TouchableOpacity>
       </View>
@@ -738,7 +739,7 @@ export default function AppointmentsScreen() {
                   <Text style={styles.googleIconText}>G</Text>
                 </View>
                 <Text style={styles.connectPromptText}>No calendars connected yet</Text>
-                <TouchableOpacity style={styles.connectButton} onPress={handleConnectGoogle}>
+                <TouchableOpacity style={styles.connectButton} onPress={handleConnectGoogle} activeOpacity={0.85}>
                   <Text style={styles.connectButtonText}>Connect Google Calendar</Text>
                 </TouchableOpacity>
               </View>
@@ -754,7 +755,7 @@ export default function AppointmentsScreen() {
                     {calendarConnection.syncedEvents} synced
                   </Text>
                 </View>
-                <TouchableOpacity style={styles.disconnectButton} onPress={handleDisconnect}>
+                <TouchableOpacity style={styles.disconnectButton} onPress={handleDisconnect} activeOpacity={0.75}>
                   <Text style={styles.disconnectButtonText}>Disconnect</Text>
                 </TouchableOpacity>
               </View>
@@ -821,10 +822,10 @@ function AppointmentCard({ appointment, onEdit, onDelete, showDate }: Appointmen
         )}
       </View>
       <View style={styles.aptActions}>
-        <TouchableOpacity onPress={onEdit} style={styles.actionButton}>
+        <TouchableOpacity onPress={onEdit} style={styles.actionButton} activeOpacity={0.7}>
           <Ionicons name="pencil-outline" size={16} color={theme.colors.text.secondary} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onDelete} style={styles.actionButton}>
+        <TouchableOpacity onPress={onDelete} style={styles.actionButton} activeOpacity={0.7}>
           <Ionicons name="trash-outline" size={16} color={theme.colors.error} />
         </TouchableOpacity>
       </View>

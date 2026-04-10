@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 import { useQuery } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
@@ -106,7 +107,14 @@ function Row({
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { logout } = useAuth();
-  const { data, loading } = useQuery<MeData>(GET_ME);
+  const [refreshing, setRefreshing] = useState(false);
+  const { data, loading, refetch } = useQuery<MeData>(GET_ME);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const handleLogout = () => {
     Alert.alert(
@@ -135,6 +143,13 @@ export default function ProfileScreen() {
         style={styles.container}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.colors.primary}
+          />
+        }
       >
       {/* ── Header ──────────────────────────────────────── */}
       <LinearGradient

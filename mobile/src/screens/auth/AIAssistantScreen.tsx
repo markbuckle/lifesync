@@ -305,6 +305,7 @@ export default function AIAssistantScreen() {
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => setShowSidebar(!showSidebar)}
+          activeOpacity={0.7}
         >
           <Ionicons
             name={showSidebar ? 'close' : 'time-outline'}
@@ -320,11 +321,11 @@ export default function AIAssistantScreen() {
 
         <View style={styles.headerRight}>
           {activeMessages.length > 0 && (
-            <TouchableOpacity style={styles.headerButton} onPress={handleClearChat}>
+            <TouchableOpacity style={styles.headerButton} onPress={handleClearChat} activeOpacity={0.7}>
               <Ionicons name="trash-outline" size={20} color="rgba(255,255,255,0.8)" />
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={styles.headerButton} onPress={createNewConversation}>
+          <TouchableOpacity style={styles.headerButton} onPress={createNewConversation} activeOpacity={0.7}>
             <Ionicons name="add-circle-outline" size={22} color={theme.colors.white} />
           </TouchableOpacity>
         </View>
@@ -349,6 +350,7 @@ export default function AIAssistantScreen() {
                     setActiveConversationId(conv.id);
                     setShowSidebar(false);
                   }}
+                  activeOpacity={0.7}
                 >
                   <Text style={styles.sidebarItemTitle} numberOfLines={1}>
                     {conv.title}
@@ -368,6 +370,7 @@ export default function AIAssistantScreen() {
         <ScrollView
           contentContainerStyle={styles.emptyState}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
           <View style={styles.emptyIcon}>
             <Ionicons name="sparkles" size={32} color={theme.colors.white} />
@@ -384,6 +387,7 @@ export default function AIAssistantScreen() {
                 key={prompt.text}
                 style={styles.promptCard}
                 onPress={() => handleSend(prompt.text)}
+                activeOpacity={0.75}
               >
                 <Ionicons
                   name={prompt.icon as keyof typeof Ionicons.glyphMap}
@@ -428,6 +432,7 @@ export default function AIAssistantScreen() {
           style={[styles.sendButton, (!inputValue.trim() || isTyping) && styles.sendButtonDisabled]}
           onPress={() => handleSend()}
           disabled={!inputValue.trim() || isTyping}
+          activeOpacity={0.8}
         >
           {isTyping ? (
             <ActivityIndicator size="small" color={theme.colors.white} />

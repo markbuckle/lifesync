@@ -235,6 +235,7 @@ const handleSignup = async () => {
             style={[styles.button, loading && styles.buttonDisabled]}
             onPress={handleSignup}
             disabled={loading}
+            activeOpacity={0.85}
           >
             {loading ? (
               <ActivityIndicator color={theme.colors.white} />
@@ -254,6 +255,7 @@ const handleSignup = async () => {
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() => navigation.navigate('Login')}
+            activeOpacity={0.75}
           >
             <Text style={styles.loginButtonText}>Already have an account? Sign in</Text>
           </TouchableOpacity>

@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { useQuery } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../context/AuthContext';
 import { GET_DASHBOARD_DATA } from '../../graphql/queries';
 import { theme } from '../../theme';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -86,7 +85,6 @@ const isToday = (dateStr: string) => {
 
 // ─── Component ───────────────────────────────────────────
 export default function DashboardScreen() {
-  const { logout } = useAuth();
   const { data, loading, error, refetch } = useQuery<DashboardData>(GET_DASHBOARD_DATA);
   const [refreshing, setRefreshing] = React.useState(false);
   const insets = useSafeAreaInsets();
@@ -109,7 +107,7 @@ export default function DashboardScreen() {
         <StatusBar barStyle="dark-content" />
         <Ionicons name="alert-circle-outline" size={48} color={theme.colors.error} />
         <Text style={styles.errorText}>Failed to load dashboard</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+        <TouchableOpacity style={styles.retryButton} onPress={() => refetch()} activeOpacity={0.85}>
           <Text style={styles.retryButtonText}>Try Again</Text>
         </TouchableOpacity>
       </View>
@@ -162,7 +160,6 @@ export default function DashboardScreen() {
         title={`${getGreeting()}, ${data?.me.firstName}`}
         subtitle={formatDate()}
         titleSize="xl"
-        rightAction={{ icon: 'log-out-outline', onPress: logout }}
       />
 
       {/* ── Stats Row ─────────────────────────────────── */}
