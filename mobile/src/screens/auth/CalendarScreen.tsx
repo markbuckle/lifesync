@@ -14,7 +14,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { useQuery, useMutation } from '@apollo/client/react';
+import { useQuery, useMutation, useApolloClient } from '@apollo/client/react';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import * as WebBrowser from 'expo-web-browser';
@@ -84,6 +84,28 @@ interface GoogleEvent {
 
 interface GoogleCalendarEventsData {
   googleCalendarEvents: GoogleEvent[];
+}
+
+interface AppointmentPayload {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  type: string;
+  color: string;
+  notes?: string;
+}
+
+interface CreateAppointmentData {
+  createAppointment: AppointmentPayload;
+}
+
+interface UpdateAppointmentData {
+  updateAppointment: AppointmentPayload;
+}
+
+interface DeleteAppointmentData {
+  deleteAppointment: { id: number };
 }
 
 // ─── Helpers ─────────────────────────────────────────────
@@ -371,6 +393,7 @@ export default function AppointmentsScreen() {
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
+  const apolloClient = useApolloClient();
   const { data, loading, error, refetch } = useQuery<AppointmentsData>(GET_APPOINTMENTS);
 
   // Google Calendar connection
@@ -417,18 +440,42 @@ export default function AppointmentsScreen() {
     );
   };
 
-  const [createAppointment] = useMutation(CREATE_APPOINTMENT_MUTATION, {
-    onCompleted: () => { refetch(); setModalVisible(false); },
+  const [createAppointment] = useMutation<CreateAppointmentData>(CREATE_APPOINTMENT_MUTATION, {
+    onCompleted: (data: CreateAppointmentData) => {
+      const cache = apolloClient.cache;
+      const existing = cache.readQuery<AppointmentsData>({ query: GET_APPOINTMENTS });
+      cache.writeQuery({
+        query: GET_APPOINTMENTS,
+        data: {
+          appointments: [...(existing?.appointments ?? []), data.createAppointment],
+        },
+      });
+      setModalVisible(false);
+    },
     onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
-  const [updateAppointment] = useMutation(UPDATE_APPOINTMENT_MUTATION, {
-    onCompleted: () => { refetch(); setModalVisible(false); },
+  const [updateAppointment] = useMutation<UpdateAppointmentData>(UPDATE_APPOINTMENT_MUTATION, {
+    // Apollo auto-merges the returned Appointment object into the normalized cache by id.
+    onCompleted: (_data: UpdateAppointmentData) => setModalVisible(false),
     onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
-  const [deleteAppointment] = useMutation(DELETE_APPOINTMENT_MUTATION, {
-    onCompleted: () => refetch(),
+  const [deleteAppointment] = useMutation<DeleteAppointmentData>(DELETE_APPOINTMENT_MUTATION, {
+    onCompleted: (data: DeleteAppointmentData) => {
+      const cache = apolloClient.cache;
+      const deletedId = data.deleteAppointment.id;
+      const normalizedId = cache.identify({ __typename: 'Appointment', id: deletedId });
+      cache.modify({
+        fields: {
+          appointments(existing: readonly { __ref: string }[] = []) {
+            return existing.filter(ref => ref.__ref !== normalizedId);
+          },
+        },
+      });
+      cache.evict({ id: normalizedId });
+      cache.gc();
+    },
     onError: (e: Error) => Alert.alert('Error', e.message),
   });
 
